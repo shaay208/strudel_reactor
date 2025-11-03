@@ -116,43 +116,40 @@ export default function StrudelDemo() {
   return (
     <div className="bg-light min-vh-100 py-4">
       <div className="container">
-        <div>
-          <h2 className="text-center mb-4 text-primary fw-bold">
-            Strudel Demo
-          </h2>
-          <main>
-            <div className="container-fluid">
-              <div className="row">
-                <div
-                  className="col-md-8"
-                  style={{ maxHeight: '50vh', overflowY: 'auto' }}
-                >
-                  <PreprocessTextarea />
-                </div>
-                <div className="col-md-4">
-                  <nav>
-                    <ProcButtons />
-                    <br />
-                    <PlayButtons />
-                  </nav>
-                </div>
-              </div>
-              <div className="row">
-                <div
-                  className="col-md-8"
-                  style={{ maxHeight: '50vh', overflowY: 'auto' }}
-                >
-                  <div id="editor" />
-                  <div id="output" />
-                </div>
-                <div className="col-md-4">
-                  <DJControls />
-                </div>
+        <h2 className="text-center mb-4 text-primary fw-bold">Strudel Demo</h2>
+        <main className="bg-white p-4 rounded shadow-sm">
+          <div className="row g-3 mb-4">
+            <div className="col-md-8">
+              <div
+                className="border rounded p-3 bg-light"
+                style={{ maxHeight: '50vh', overflowY: 'auto' }}
+              >
+                <PreprocessTextarea />
               </div>
             </div>
-            <canvas id="roll"></canvas>
-          </main>
-        </div>
+            <div className="col-md-4">
+              <nav>
+                <ProcButtons />
+                <br />
+                <PlayButtons />
+              </nav>
+            </div>
+          </div>
+          <div className="row">
+            <div
+              className="col-md-8"
+              style={{ maxHeight: '50vh', overflowY: 'auto' }}
+            >
+              <div id="editor" />
+              <div id="output" />
+            </div>
+            <div className="col-md-4">
+              <DJControls />
+            </div>
+          </div>
+
+          <canvas id="roll"></canvas>
+        </main>
       </div>
     </div>
   );
