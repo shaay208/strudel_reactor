@@ -14,6 +14,7 @@ let globalEditor = null;
 
 const handleD3Data = (event) => {
     console.log(event.detail);
+    console.log("Shalini first commit - git pipline commit test");
 };
 
 export function SetupButtons() {
