@@ -1,12 +1,14 @@
-import React from 'react'
+import React from 'react';
 
 const PreprocessTextarea = () => {
   return (
     <>
-                            <label htmlFor="exampleFormControlTextarea1" className="form-label">Text to preprocess:</label>
-                        <textarea className="form-control" rows="15" id="proc" ></textarea>
-                        </>
-  )
-}
+      <label htmlFor="exampleFormControlTextarea1" className="form-label">
+        Text to preprocess:
+      </label>
+      <textarea className="form-control" rows="15" id="proc"></textarea>
+    </>
+  );
+};
 
-export default PreprocessTextarea
+export default PreprocessTextarea;
