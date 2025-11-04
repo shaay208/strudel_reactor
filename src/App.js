@@ -18,6 +18,7 @@ import DJControls from './components/DJControls';
 import PlayButtons from './components/PlayButtons';
 import ProcButtons from './components/ProcButtons';
 import PreprocessTextarea from './components/PreprocessTextarea';
+import Graph from './components/Graph';
 
 let globalEditor = null;
 
@@ -134,6 +135,7 @@ export default function StrudelDemo() {
                 <div className="w-100 border rounded p-3 bg-light">
                   <ProcButtons />
                 </div>
+                <Graph />
                 <div className="w-100 border rounded p-3 bg-light">
                   <PlayButtons />
                 </div>
