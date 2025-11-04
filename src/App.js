@@ -131,17 +131,25 @@ export default function StrudelDemo() {
                 </div>
               </div>
             </div>
-
-            <div className="col-md-4">
-              <nav className="d-flex flex-column gap-3 align-items-start">
-                <div className="w-100 border rounded p-3 bg-light">
+            <div className="col-md-4 d-flex flex-column gap-3">
+              {/* Processing Buttons */}
+              <div className="card glass-card">
+                <div className="card-header  text-primary fw-bold gradient-header">
+                  Processing
+                </div>
+                <div className="card-body">
                   <ProcButtons />
                 </div>
-                <Graph />
-                <div className="w-100 border rounded p-3 bg-light">
-                  <PlayButtons />
+              </div>
+
+              <div className="card glass-card flex-grow-1">
+                <div className="card-header text-primary fw-bold gradient-header">
+                  Graph
                 </div>
-              </nav>
+                <div className="card-body scrollable">
+                  <Graph />
+                </div>
+              </div>
             </div>
           </div>
           <div className="row g-3 mb-3">
