@@ -162,19 +162,35 @@ export default function StrudelDemo() {
             </div>
           </div>
           <div className="row g-3 mb-3">
-            <div
-              className="col-md-8"
-              style={{ maxHeight: '50vh', overflowY: 'auto' }}
-            >
-              <div id="editor" />
-              <div id="output" />
+            <div className="col-md-8">
+              <div className="card glass-card mb-3">
+                <div className="card-header text-primary fw-bold gradient-header">
+                  Editor
+                </div>
+                <div className="card-body scrollable">
+                  <div id="editor" />
+                </div>
+              </div>
             </div>
+
             <div className="col-md-4">
-              <DJControls />
+              <div className="card glass-card h-100">
+                <div className="card-header text-primary fw-bold d-flex justify-content-center gradient-header">
+                  DJ Controls
+                </div>
+                <div className="card-body">
+                  <DJControls />
+                </div>
+              </div>
+            </div>
+            <div className="card-body d-flex justify-content-center">
+              <canvas
+                id="roll"
+                className="w-100 rounded canvas-glow"
+                style={{ height: '300px' }}
+              />
             </div>
           </div>
-
-          <canvas id="roll"></canvas>
         </main>
       </div>
     </div>
