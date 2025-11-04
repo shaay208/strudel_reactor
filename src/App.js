@@ -117,16 +117,18 @@ export default function StrudelDemo() {
 
   return (
     <div className="bg-light min-vh-100 py-4">
-      <div className="container">
+      <div className="container  py-4">
         <h2 className="text-center mb-4 text-primary fw-bold">Strudel Demo</h2>
-        <main className="bg-white p-4 rounded shadow-sm">
+        <main className="main-panel">
           <div className="row g-3 mb-4">
             <div className="col-md-8">
-              <div
-                className="border rounded p-3 bg-light"
-                style={{ maxHeight: '50vh', overflowY: 'auto' }}
-              >
-                <PreprocessTextarea />
+              <div className="card glass-card h-100">
+                <div className="card-header gradient-header">
+                  <h6 className="text-primary fw-bold">Text to preprocess:</h6>
+                </div>
+                <div className="card-body ">
+                  <PreprocessTextarea />
+                </div>
               </div>
             </div>
 
@@ -142,7 +144,7 @@ export default function StrudelDemo() {
               </nav>
             </div>
           </div>
-          <div className="row">
+          <div className="row g-3 mb-3">
             <div
               className="col-md-8"
               style={{ maxHeight: '50vh', overflowY: 'auto' }}
