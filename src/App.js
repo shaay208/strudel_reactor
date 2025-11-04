@@ -11,6 +11,7 @@ import {
   registerSynthSounds,
 } from '@strudel/webaudio';
 import { registerSoundfonts } from '@strudel/soundfonts';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 import { stranger_tune } from './tunes';
 import console_monkey_patch, { getD3Data } from './console-monkey-patch';
 import DJControls from './components/DJControls';
@@ -127,11 +128,15 @@ export default function StrudelDemo() {
                 <PreprocessTextarea />
               </div>
             </div>
+
             <div className="col-md-4">
-              <nav>
-                <ProcButtons />
-                <br />
-                <PlayButtons />
+              <nav className="d-flex flex-column gap-3 align-items-start">
+                <div className="w-100 border rounded p-3 bg-light">
+                  <ProcButtons />
+                </div>
+                <div className="w-100 border rounded p-3 bg-light">
+                  <PlayButtons />
+                </div>
               </nav>
             </div>
           </div>
