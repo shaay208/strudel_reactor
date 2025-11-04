@@ -1,20 +1,73 @@
 import { useState, useEffect } from 'react';
 import * as d3 from 'd3';
+// Import subscribe/unsubscribe to listen for music events
+import { subscribe, unsubscribe } from '../console-monkey-patch';
 
 export default function Graph() {
   const [rngNumber, setRngNumber] = useState(0);
   const [rngArray, setRngArray] = useState([]);
+  // Track the last music event string
+  const [lastHap, setLastHap] = useState('');
+  // Count total events received
+  const [totalEvents, setTotalEvents] = useState(0);
   const maxItems = 20;
-  const timeout = 500;
   const maxValue = 60;
+  // Clear graph every 100 events
+  const clearEvery = 100;
 
+  // Listen for Strudel music events
   useEffect(() => {
-    const interval = setInterval(() => {
-      setRngNumber(Math.floor(Math.random() * maxValue));
-    }, timeout);
+    function handleMusicData(event) {
+      const musicData = event.detail;
 
-    return () => clearInterval(interval);
+      if (musicData && musicData.length > 0) {
+        const latest = musicData[musicData.length - 1];
+        // Convert music string to number
+        const number = convertToNumber(latest);
+
+        setRngNumber(number);
+        setLastHap(latest);
+        setTotalEvents((prev) => prev + 1);
+      }
+    }
+
+    subscribe('d3Data', handleMusicData);
+    return () => unsubscribe('d3Data', handleMusicData);
   }, []);
+
+  // Convert Strudel music strings to numbers for visualization
+  // Extracts values from patterns like "note:c3", "n:5", "gain:0.8"
+  function convertToNumber(musicString) {
+    // Extract musical note (e.g., "note:bb3")
+    const noteMatch = musicString.match(/note:([a-g]#?b?)(\d+)/i);
+    if (noteMatch) {
+      const octave = parseInt(noteMatch[2]);
+      return (octave * 12) % maxValue;
+    }
+
+    // Extract n value 
+    const nMatch = musicString.match(/n:(\d+)/);
+    if (nMatch) return parseInt(nMatch[1]) % maxValue;
+
+    // Extract gain value 
+    const gainMatch = musicString.match(/gain:([\d.]+)/);
+    if (gainMatch) return Math.floor(parseFloat(gainMatch[1]) * maxValue);
+
+    // Extract postgain value 
+    const postgainMatch = musicString.match(/postgain:([\d.]+)/);
+    if (postgainMatch)
+      return Math.floor(parseFloat(postgainMatch[1]) * 10) % maxValue;
+
+    // Use string length
+    return musicString.length % maxValue;
+  }
+
+  // Clear the graph array every 100 events
+  useEffect(() => {
+    if (totalEvents % clearEvery === 0 && totalEvents > 0) {
+      setRngArray([]);
+    }
+  }, [totalEvents]);
 
   useEffect(() => {
     // append new value and keep length <= maxItems
@@ -124,9 +177,48 @@ export default function Graph() {
       .attr('d', line);
   }, [rngArray, maxValue]);
 
+  // Calculate countdown to next clear
+  const eventsUntilClear = clearEvery - (totalEvents % clearEvery);
+
   return (
     <div className="App container">
-      <h1>RNG Output: {rngNumber}</h1>
+      <h1>Strudel Audio Visualizer</h1>
+      <div className="row">
+        <div className="col-12">
+          <div className="card mb-3">
+            <div className="card-body">
+              <p>
+                <strong>Total Events:</strong> {totalEvents} |{' '}
+                <strong>Graph Points:</strong> {rngArray.length}/{maxItems}
+              </p>
+              <p>
+                <strong>Clear in:</strong>{' '}
+                <span
+                  className={`badge ${
+                    eventsUntilClear <= 10 ? 'bg-danger' : 'bg-info'
+                  }`}
+                >
+                  {eventsUntilClear}
+                </span>{' '}
+                events
+              </p>
+              <p>
+                <strong>Last Value:</strong>{' '}
+                <span className="badge bg-success">{rngNumber}</span>
+              </p>
+              <p className="mb-0">
+                <strong>Last Hap:</strong>{' '}
+                <small className="text-muted">
+                  {lastHap || 'Waiting for data...'}
+                </small>
+              </p>
+            </div>
+          </div>
+          <div className="alert alert-warning">
+            <strong>Current Graph Data:</strong> [{rngArray.join(', ')}]
+          </div>
+        </div>
+      </div>
       <div className="row">
         <svg
           width="100%"

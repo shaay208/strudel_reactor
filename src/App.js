@@ -22,10 +22,35 @@ import Graph from './components/Graph';
 
 let globalEditor = null;
 
+// REMOVED: Original handleD3Data function caused infinite loops
+// It logged the entire array which created massive strings
+/*
 const handleD3Data = (event) => {
   console.log(event.detail);
   console.log('Shalini first commit - git pipline commit test');
 };
+*/
+
+// Track last draw time to throttle updates
+let lastDrawTime = 0;
+
+// Extract music information from Strudel hap objects
+// Converts hap.value into string like "note:c3 s:piano gain:0.5"
+function getMusicInfo(hap) {
+  const value = hap.value || {};
+
+  if (!value || typeof value !== 'object') return '';
+
+  const parts = [];
+
+  if (value.note !== undefined) parts.push(`note:${value.note}`);
+  if (value.n !== undefined) parts.push(`n:${value.n}`);
+  if (value.s !== undefined) parts.push(`s:${value.s}`);
+  if (value.gain !== undefined) parts.push(`gain:${value.gain}`);
+  if (value.postgain !== undefined) parts.push(`postgain:${value.postgain}`);
+
+  return parts.length > 0 ? parts.join(' ') : '';
+}
 
 export function SetupButtons() {
   document
@@ -74,7 +99,6 @@ export default function StrudelDemo() {
 
   useEffect(() => {
     if (!hasRun.current) {
-      document.addEventListener('d3Data', handleD3Data);
       console_monkey_patch();
       hasRun.current = true;
       //Code copied from example: https://codeberg.org/uzu/strudel/src/branch/main/examples/codemirror-repl
@@ -84,14 +108,29 @@ export default function StrudelDemo() {
       canvas.height = canvas.height * 2;
       const drawContext = canvas.getContext('2d');
       const drawTime = [-2, 2]; // time window of drawn haps
+
       globalEditor = new StrudelMirror({
         defaultOutput: webaudioOutput,
         getTime: () => getAudioContext().currentTime,
         transpiler,
         root: document.getElementById('editor'),
         drawTime,
-        onDraw: (haps, time) =>
-          drawPianoroll({ haps, time, ctx: drawContext, drawTime, fold: 0 }),
+        // Draw pianoroll and capture music events
+        onDraw: (haps, time) => {
+          drawPianoroll({ haps, time, ctx: drawContext, drawTime, fold: 0 });
+
+          // Throttle updates to every 0.05 seconds
+          if (haps && haps.length > 0 && time - lastDrawTime > 0.05) {
+            lastDrawTime = time;
+            // Pick random hap from current events
+            const randomHap = haps[Math.floor(Math.random() * haps.length)];
+            const musicInfo = getMusicInfo(randomHap);
+            // Log music info (captured by console-monkey-patch)
+            if (musicInfo && musicInfo.length > 0) {
+              console.log(musicInfo);
+            }
+          }
+        },
         prebake: async () => {
           initAudioOnFirstClick(); // needed to make the browser happy (don't await this here..)
           const loadModules = evalScope(
