@@ -45,15 +45,15 @@ export default function Graph() {
       return (octave * 12) % maxValue;
     }
 
-    // Extract n value 
+    // Extract n value
     const nMatch = musicString.match(/n:(\d+)/);
     if (nMatch) return parseInt(nMatch[1]) % maxValue;
 
-    // Extract gain value 
+    // Extract gain value
     const gainMatch = musicString.match(/gain:([\d.]+)/);
     if (gainMatch) return Math.floor(parseFloat(gainMatch[1]) * maxValue);
 
-    // Extract postgain value 
+    // Extract postgain value
     const postgainMatch = musicString.match(/postgain:([\d.]+)/);
     if (postgainMatch)
       return Math.floor(parseFloat(postgainMatch[1]) * 10) % maxValue;
@@ -182,7 +182,6 @@ export default function Graph() {
 
   return (
     <div className="App container">
-      <h1>Strudel Audio Visualizer</h1>
       <div className="row">
         <div className="col-12">
           <div className="card mb-3">
