@@ -150,6 +150,15 @@ export default function StrudelDemo() {
                   <Graph />
                 </div>
               </div>
+              {/* play buttons */}
+              <div className="card glass-card">
+                <div className="card-header text-primary fw-bold gradient-header">
+                  Playback
+                </div>
+                <div className="card-body d-flex justify-content-center">
+                  <PlayButtons />
+                </div>
+              </div>
             </div>
           </div>
           <div className="row g-3 mb-3">
