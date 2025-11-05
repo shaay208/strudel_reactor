@@ -52,50 +52,59 @@ function getMusicInfo(hap) {
   return parts.length > 0 ? parts.join(' ') : '';
 }
 
-export function SetupButtons() {
-  document
-    .getElementById('play')
-    .addEventListener('click', () => globalEditor.evaluate());
-  document
-    .getElementById('stop')
-    .addEventListener('click', () => globalEditor.stop());
-  document.getElementById('process').addEventListener('click', () => {
-    Proc();
-  });
-  document.getElementById('process_play').addEventListener('click', () => {
-    if (globalEditor != null) {
-      Proc();
-      globalEditor.evaluate();
-    }
-  });
-}
+// export function SetupButtons() {
+//   document
+//     .getElementById('play')
+//     .addEventListener('click', () => globalEditor.evaluate());
+//   document
+//     .getElementById('stop')
+//     .addEventListener('click', () => globalEditor.stop());
+//   document.getElementById('process').addEventListener('click', () => {
+//     Proc();
+//   });
+//   document.getElementById('process_play').addEventListener('click', () => {
+//     if (globalEditor != null) {
+//       Proc();
+//       globalEditor.evaluate();
+//     }
+//   });
+// }
 
-export function ProcAndPlay() {
-  if (globalEditor != null && globalEditor.repl.state.started == true) {
-    console.log(globalEditor);
-    Proc();
-    globalEditor.evaluate();
-  }
-}
+// export function ProcAndPlay() {
+//   if (globalEditor != null && globalEditor.repl.state.started == true) {
+//     console.log(globalEditor);
+//     Proc();
+//     globalEditor.evaluate();
+//   }
+// }
 
-export function Proc() {
-  let proc_text = document.getElementById('proc').value;
-  let proc_text_replaced = proc_text.replaceAll('<p1_Radio>', ProcessText);
-  ProcessText(proc_text);
-  globalEditor.setCode(proc_text_replaced);
-}
+// export function Proc() {
+//   let proc_text = document.getElementById('proc').value;
+//   let proc_text_replaced = proc_text.replaceAll('<p1_Radio>', ProcessText);
+//   ProcessText(proc_text);
+//   globalEditor.setCode(proc_text_replaced);
+// }
 
-export function ProcessText(match, ...args) {
-  let replace = '';
-  //   if (document.getElementById('flexRadioDefault2').checked) {
-  //     replace = '_';
-  //   }
+// export function ProcessText(match, ...args) {
+//   let replace = '';
+//   //   if (document.getElementById('flexRadioDefault2').checked) {
+//   //     replace = '_';
+//   //   }
 
-  return replace;
-}
+//   return replace;
+// }
 
 export default function StrudelDemo() {
   const hasRun = useRef(false);
+
+
+  const handlePlay = () => {
+    globalEditor.evaluate();
+  };
+
+  const handleStop = () => {
+    globalEditor.stop();
+  }
 
   useEffect(() => {
     if (!hasRun.current) {
@@ -149,8 +158,8 @@ export default function StrudelDemo() {
       });
 
       document.getElementById('proc').value = stranger_tune;
-      SetupButtons();
-      Proc();
+      // SetupButtons();
+      // Proc();
     }
   }, []);
 
@@ -195,10 +204,10 @@ export default function StrudelDemo() {
                   Playback
                 </div>
                 <div className="card-body d-flex justify-content-center">
-                  <PlayButtons />
+                  <PlayButtons onPlay={handlePlay} onStop={handleStop} />
                 </div>
               </div>
-            </div>
+            </div> 
           </div>
           <div className="row g-3 mb-3">
             <div className="col-md-8">
