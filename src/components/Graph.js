@@ -207,8 +207,22 @@ export default function Graph() {
               </p>
               <p className="mb-0">
                 <strong>Last Hap:</strong>{' '}
-                <small className="text-muted">
-                  {lastHap || 'Waiting for data...'}
+                <small
+                  className="text-muted d-inline-block"
+                  style={{
+                    maxWidth: '200px',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    verticalAlign: 'top',
+                  }}
+                  title={lastHap || 'Waiting for data...'}
+                >
+                  {lastHap
+                    ? lastHap.length > 30
+                      ? lastHap.substring(0, 30) + '...'
+                      : lastHap
+                    : 'Waiting for data...'}
                 </small>
               </p>
             </div>

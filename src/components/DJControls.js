@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
-function DJControls() {
-  const [volume, setVolume] = useState(50);
+function DJControls({ volume, onVolumeChange }) {
   const [bpm, setBpm] = useState(120);
   const [mode, setMode] = useState('ON');
 
@@ -50,8 +49,7 @@ function DJControls() {
           id="volumeControl"
           min="0"
           max="100"
-          value={volume}
-          onChange={(e) => setVolume(parseInt(e.target.value))}
+          onMouseUp={onVolumeChange}
         />
       </div>
 

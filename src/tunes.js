@@ -47,6 +47,7 @@ note(pick(basslines, bass))
 .lpf(700)
 .room(0.4)
 .postgain(pick(gain_patterns, pattern))
+.gain(1)
 
 
 main_arp: 
@@ -57,6 +58,7 @@ note(pick(arpeggiator1, "<0 1 2 3>/2"))
 .room(0.6)
 .lpenv(3.3)
 .postgain(pick(gain_patterns, pattern))
+.gain(1)
 
 
 drums:
@@ -65,7 +67,8 @@ stack(
   .postgain(6)
   .pcurve(2)
   .pdec(1)
-  .struct(pick(drum_structure, pattern)),
+  .struct(pick(drum_structure, pattern))
+  .gain(1),
 
   s("sh").struct("[x!3 ~!2 x!10 ~]")
   .postgain(0.5).lpf(7000)
@@ -73,7 +76,7 @@ stack(
   .speed(0.8).jux(rev).room(sine.range(0.1,0.4)).gain(0.6),
 
   s("{~ ~ rim ~ cp ~ rim cp ~!2 rim ~ cp ~ < rim ~ >!2}%8 *2")
-  .bank("[KorgDDM110, OberheimDmx]").speed(1.2)
+  .bank("[KorgDDM110, OberheimDmx]").speed(1.2).gain(1)
   .postgain(.25),
 )
 
@@ -84,17 +87,19 @@ stack(
   .gain(0.6)
   .jux(rev)
   .room(sine.range(0.1,0.4))
-  .postgain(0.5),
+  .postgain(0.5)
+  .gain(1),
   
   s("[psr:[2|5|6|7|8|9|12|24|25]*16]?0.1")
   .gain(0.1)
   .postgain(pick(gain_patterns, pattern))
   .hpf(1000)
   .speed(0.5)
-  .rarely(jux(rev)),
+  .rarely(jux(rev))
+  .gain(1),
 )
 //Remixed and reproduced from Algorave Dave's code found here: https://www.youtube.com/watch?v=ZCcpWzhekEY
-// all(x => x.gain(mouseX.range(0,1)))
+// all(x => x.gain({$VOLUME}))
 // all(x => x.log())
 
 // @version 1.2`;

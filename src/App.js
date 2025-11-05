@@ -1,7 +1,7 @@
 import './App.css';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { StrudelMirror } from '@strudel/codemirror';
-import { evalScope } from '@strudel/core';
+import { evalScope, v } from '@strudel/core';
 import { drawPianoroll } from '@strudel/draw';
 import { initAudioOnFirstClick } from '@strudel/webaudio';
 import { transpiler } from '@strudel/transpiler';
@@ -19,6 +19,7 @@ import PlayButtons from './components/PlayButtons';
 import ProcButtons from './components/ProcButtons';
 import PreprocessTextarea from './components/PreprocessTextarea';
 import Graph from './components/Graph';
+import { preProcess } from './utils/PreProcessLogic';
 
 let globalEditor = null;
 
@@ -97,14 +98,42 @@ function getMusicInfo(hap) {
 export default function StrudelDemo() {
   const hasRun = useRef(false);
 
+  const [songText, setSongText] = useState(stranger_tune);
+  const [procText, setProcText] = useState(stranger_tune);
+  const [volume, setVolume] = useState(50); // Volume as percentage (0-100)
+  const [editorReady, setEditorReady] = useState(false);
+
+  const [state, setState] = useState('stop');
 
   const handlePlay = () => {
+    if (!globalEditor) {
+      console.warn('Editor not ready yet');
+      return;
+    }
+    // Convert percentage volume (0-100) to decimal (0-1)
+    const volumeDecimal = volume / 100;
+    let outputText = preProcess(procText, volumeDecimal);
+    globalEditor.setCode(outputText);
     globalEditor.evaluate();
   };
 
   const handleStop = () => {
+    if (!globalEditor) {
+      console.warn('Editor not ready yet');
+      return;
+    }
     globalEditor.stop();
-  }
+  };
+
+  useEffect(() => {
+    if (state === 'play' && editorReady && globalEditor) {
+      // Only re-run when volume changes during playback
+      const volumeDecimal = volume / 100;
+      let outputText = preProcess(procText, volumeDecimal);
+      globalEditor.setCode(outputText);
+      globalEditor.evaluate();
+    }
+  }, [volume, procText, state, editorReady]);
 
   useEffect(() => {
     if (!hasRun.current) {
@@ -157,11 +186,15 @@ export default function StrudelDemo() {
         },
       });
 
+      // Set initial code and mark editor as ready
+      globalEditor.setCode(songText);
+      setEditorReady(true);
+
       document.getElementById('proc').value = stranger_tune;
       // SetupButtons();
       // Proc();
     }
-  }, []);
+  }, [songText]);
 
   return (
     <div className="bg-light min-vh-100 py-4">
@@ -175,7 +208,13 @@ export default function StrudelDemo() {
                   <h6 className="text-primary fw-bold">Text to preprocess:</h6>
                 </div>
                 <div className="card-body ">
-                  <PreprocessTextarea />
+                  <PreprocessTextarea
+                    defaultValue={songText}
+                    onChange={(e) => {
+                      setSongText(e.target.value);
+                      setProcText(e.target.value);
+                    }}
+                  />
                 </div>
               </div>
             </div>
@@ -204,10 +243,20 @@ export default function StrudelDemo() {
                   Playback
                 </div>
                 <div className="card-body d-flex justify-content-center">
-                  <PlayButtons onPlay={handlePlay} onStop={handleStop} />
+                  <PlayButtons
+                    onPlay={() => {
+                      setState('play');
+                      handlePlay();
+                    }}
+                    onStop={() => {
+                      setState('stop');
+                      handleStop();
+                    }}
+                    disabled={!editorReady}
+                  />
                 </div>
               </div>
-            </div> 
+            </div>
           </div>
           <div className="row g-3 mb-3">
             <div className="col-md-8">
@@ -227,7 +276,7 @@ export default function StrudelDemo() {
                   DJ Controls
                 </div>
                 <div className="card-body">
-                  <DJControls />
+                  <DJControls volume={volume} onVolumeChange={(e) => setVolume(e.target.value)} />
                 </div>
               </div>
             </div>
