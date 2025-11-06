@@ -1,9 +1,15 @@
 import React from 'react';
 
-const PreprocessTextarea = ({ defaultValue, onChange }) => {
+const PreprocessTextarea = ({ value, onChange }) => {
   return (
     <>
-      <textarea className="form-control" rows="15" id="proc" defaultValue={defaultValue} onChange={onChange}></textarea>
+      <textarea
+        className="form-control"
+        rows="15"
+        id="proc"
+        value={value}
+        onChange={onChange}
+      />
     </>
   );
 };

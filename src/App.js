@@ -12,7 +12,7 @@ import {
 } from '@strudel/webaudio';
 import { registerSoundfonts } from '@strudel/soundfonts';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import { stranger_tune, getTrackById } from './tunes';
+import { stranger_tune, tracks, getTrackById } from './tunes';
 import console_monkey_patch from './console-monkey-patch';
 import DJControls from './components/DJControls';
 import PlayButtons from './components/PlayButtons';
@@ -66,19 +66,7 @@ export default function StrudelDemo() {
   const [musicElements, setMusicElements] = useState([]); // Store added music elements
   const [state, setState] = useState('stop');
 
-  const handlePlay = () => {
-    if (!globalEditor) {
-      console.warn('Editor not ready yet');
-      return;
-    }
-    // Convert percentage volume (0-100) to decimal (0-1)
-    const volumeDecimal = volume / 100;
-    let outputText = preProcess(procText, volumeDecimal);
-    globalEditor.setCode(outputText);
-    globalEditor.evaluate();
-  };
-
-  const handleTrackChange = (trackId) => {
+  const handleTrackChange = useCallback((trackId) => {
     const track = getTrackById(trackId);
     if (track) {
       setSelectedTrack(trackId);
@@ -96,15 +84,109 @@ export default function StrudelDemo() {
         }
       }
     }
-  };
+  }, [editorReady, state]);
 
-  const handleStop = () => {
+  const handleTrackNext = useCallback(() => {
+    const currentIndex = tracks.findIndex(
+      (track) => track.id === selectedTrack
+    );
+    const nextIndex = (currentIndex + 1) % tracks.length;
+    handleTrackChange(tracks[nextIndex].id);
+  }, [selectedTrack, handleTrackChange]);
+
+  const handleTrackPrev = useCallback(() => {
+    const currentIndex = tracks.findIndex(
+      (track) => track.id === selectedTrack
+    );
+    const prevIndex = currentIndex === 0 ? tracks.length - 1 : currentIndex - 1;
+    handleTrackChange(tracks[prevIndex].id);
+  }, [selectedTrack, handleTrackChange]);
+
+  const handleVolumeUp = useCallback(() => {
+    setVolume((prev) => Math.min(100, prev + 10));
+  }, []);
+
+  const handleVolumeDown = useCallback(() => {
+    setVolume((prev) => Math.max(0, prev - 10));
+  }, []);
+
+  const handleAddMusicElement = useCallback((elementCode, elementName) => {
+    const newElement = {
+      id: Date.now(),
+      name: elementName,
+      code: elementCode,
+    };
+
+    setMusicElements((prev) => [...prev, newElement]);
+
+    // If currently playing, update the track with the new element
+    if (state === 'play' && globalEditor && editorReady) {
+      updatePlayingTrack([...musicElements, newElement]);
+    }
+  }, [state, editorReady, musicElements]);
+
+  const updatePlayingTrack = useCallback((elements = musicElements) => {
+    if (!globalEditor || !editorReady) return;
+    
+    const volumeDecimal = volume / 100;
+    let baseCode = preProcess(procText, volumeDecimal);
+
+    // If there are music elements, add them as additional named parts
+    if (elements.length > 0) {
+      const elementCodes = elements
+        .map((element, index) => `added_element_${index + 1}: ${element.code}`)
+        .join('\n\n');
+      
+      // Simply append the elements to the base code
+      baseCode += '\n\n// === Added Elements ===\n' + elementCodes;
+    }
+    
+    globalEditor.setCode(baseCode);
+    globalEditor.evaluate();
+  }, [musicElements, editorReady, volume, procText]);
+
+  // Handle processing the text (preprocess function)
+  const handleProcess = useCallback(() => {
+    if (!globalEditor || !editorReady) return;
+    
+    const volumeDecimal = volume / 100;
+    let outputText = preProcess(procText, volumeDecimal);
+    
+    // Add music elements if any exist
+    if (musicElements.length > 0) {
+      const elementCodes = musicElements
+        .map((element, index) => `added_element_${index + 1}: ${element.code}`)
+        .join('\n\n');
+      outputText += '\n\n// === Added Elements ===\n' + elementCodes;
+    }
+    
+    globalEditor.setCode(outputText);
+  }, [editorReady, volume, procText, musicElements]);
+
+  // Handle process and play
+  const handleProcessAndPlay = useCallback(() => {
+    handleProcess();
+    if (globalEditor) {
+      setState('play');
+      globalEditor.evaluate();
+    }
+  }, [handleProcess]);
+
+  const handlePlay = useCallback(() => {
+    if (!globalEditor) {
+      console.warn('Editor not ready yet');
+      return;
+    }
+    updatePlayingTrack();
+  }, [updatePlayingTrack]);
+
+  const handleStop = useCallback(() => {
     if (!globalEditor) {
       console.warn('Editor not ready yet');
       return;
     }
     globalEditor.stop();
-  };
+  }, []);
 
   useEffect(() => {
     if (state === 'play' && editorReady && globalEditor) {
@@ -233,7 +315,10 @@ export default function StrudelDemo() {
                   Processing
                 </div>
                 <div className="card-body">
-                  <ProcButtons />
+                  <ProcButtons 
+                    onProcess={handleProcess}
+                    onProcessAndPlay={handleProcessAndPlay}
+                  />
                 </div>
               </div>
 
@@ -281,7 +366,7 @@ export default function StrudelDemo() {
             <div className="col-md-4">
               <div className="card glass-card h-100">
                 <div className="card-header text-primary fw-bold d-flex justify-content-center gradient-header">
-                  DJ Controls
+                 DJ Controls
                 </div>
                 <div className="card-body">
                   <DJControls
