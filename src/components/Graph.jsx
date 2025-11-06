@@ -184,7 +184,7 @@ export default function Graph() {
     <div className="App container">
       <div className="row">
         <div className="col-12">
-          <div className="accordion" id="graphAccordion">
+          <div className="accordion " id="graphAccordion">
             <div className="accordion-item">
               <h2 className="accordion-header">
                 <button
@@ -200,7 +200,7 @@ export default function Graph() {
               </h2>
               <div
                 id="collapseGraphStats"
-                className="accordion-collapse collapse show"
+                className="accordion-collapse collapse"
                 data-bs-parent="#graphAccordion"
               >
                 <div className="accordion-body">

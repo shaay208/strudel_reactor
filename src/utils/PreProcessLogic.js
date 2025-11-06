@@ -2,12 +2,17 @@ export const preProcess = (
   inputText,
   volume,
   bpm = 140,
-  musicElements = []
+  musicElements = [],
+  p1Mode = 'on'
 ) => {
   let outputText = inputText + '\n// hello, this is a test';
   outputText += `\n//all(x => x.gain(${volume}))`;
   outputText = outputText.replaceAll('{$VOLUME}', volume);
   outputText = outputText.replaceAll('{$BPM}', bpm);
+
+  // Handle p1 mode replacement
+  const p1Replacement = p1Mode === 'hush' ? '_' : '';
+  outputText = outputText.replaceAll('<p1_Radio>', p1Replacement);
 
   // Original regex for named blocks (like bassline:, drums:, etc.)
   let regex = /[a-zA-Z0-9_.-]+:\s*\n[\s\S]+?\r?\n(?=[a-zA-Z0-9_]*[:/])/gm;

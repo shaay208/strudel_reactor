@@ -8,9 +8,10 @@ function DJControls({
   onTrackChange,
   bpm,
   onBpmChange,
+  p1Mode,
+  onP1ModeChange,
 }) {
   const [localBpm, setLocalBpm] = useState(120);
-  const [mode, setMode] = useState('ON');
 
   const currentTrack =
     tracks.find((track) => track.id === selectedTrack) || tracks[0];
@@ -65,8 +66,8 @@ function DJControls({
             type="radio"
             name="djMode"
             id="modeOn"
-            checked={mode === 'ON'}
-            onChange={() => setMode('ON')}
+            checked={p1Mode === 'on'}
+            onChange={() => onP1ModeChange('on')}
           />
           <label className="form-check-label" htmlFor="modeOn">
             <i className="bi bi-play-circle me-1"></i>P1: ON
@@ -79,8 +80,8 @@ function DJControls({
             type="radio"
             name="djMode"
             id="modeHush"
-            checked={mode === 'HUSH'}
-            onChange={() => setMode('HUSH')}
+            checked={p1Mode === 'hush'}
+            onChange={() => onP1ModeChange('hush')}
           />
           <label className="form-check-label" htmlFor="modeHush">
             <i className="bi bi-pause-circle me-1"></i>P1: HUSH
@@ -131,10 +132,10 @@ function DJControls({
       {/* Status Message */}
       <div
         className={`alert ${
-          mode === 'ON' ? 'alert-success' : 'alert-secondary'
+          p1Mode === 'on' ? 'alert-success' : 'alert-secondary'
         } mt-3 text-center fw-semibold py-2`}
       >
-        {mode === 'ON' ? (
+        {p1Mode === 'on' ? (
           <>
             <i className="bi bi-play-fill me-1"></i>Playing at {bpm || localBpm}{' '}
             BPM
