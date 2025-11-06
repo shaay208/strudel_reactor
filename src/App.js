@@ -1,5 +1,5 @@
 import './App.css';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { StrudelMirror } from '@strudel/codemirror';
 import { evalScope } from '@strudel/core';
 import { drawPianoroll } from '@strudel/draw';
@@ -13,12 +13,13 @@ import {
 import { registerSoundfonts } from '@strudel/soundfonts';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { stranger_tune, getTrackById } from './tunes';
-import console_monkey_patch, { getD3Data } from './console-monkey-patch';
+import console_monkey_patch from './console-monkey-patch';
 import DJControls from './components/DJControls';
 import PlayButtons from './components/PlayButtons';
 import ProcButtons from './components/ProcButtons';
 import PreprocessTextarea from './components/PreprocessTextarea';
 import Graph from './components/Graph';
+import TrackInfo from './components/TrackInfo';
 import KeyboardShortcuts from './components/KeyboardShortcuts';
 import { preProcess } from './utils/PreProcessLogic';
 
@@ -54,48 +55,6 @@ function getMusicInfo(hap) {
   return parts.length > 0 ? parts.join(' ') : '';
 }
 
-// export function SetupButtons() {
-//   document
-//     .getElementById('play')
-//     .addEventListener('click', () => globalEditor.evaluate());
-//   document
-//     .getElementById('stop')
-//     .addEventListener('click', () => globalEditor.stop());
-//   document.getElementById('process').addEventListener('click', () => {
-//     Proc();
-//   });
-//   document.getElementById('process_play').addEventListener('click', () => {
-//     if (globalEditor != null) {
-//       Proc();
-//       globalEditor.evaluate();
-//     }
-//   });
-// }
-
-// export function ProcAndPlay() {
-//   if (globalEditor != null && globalEditor.repl.state.started == true) {
-//     console.log(globalEditor);
-//     Proc();
-//     globalEditor.evaluate();
-//   }
-// }
-
-// export function Proc() {
-//   let proc_text = document.getElementById('proc').value;
-//   let proc_text_replaced = proc_text.replaceAll('<p1_Radio>', ProcessText);
-//   ProcessText(proc_text);
-//   globalEditor.setCode(proc_text_replaced);
-// }
-
-// export function ProcessText(match, ...args) {
-//   let replace = '';
-//   //   if (document.getElementById('flexRadioDefault2').checked) {
-//   //     replace = '_';
-//   //   }
-
-//   return replace;
-// }
-
 export default function StrudelDemo() {
   const hasRun = useRef(false);
 
@@ -103,7 +62,7 @@ export default function StrudelDemo() {
   const [procText, setProcText] = useState(stranger_tune);
   const [volume, setVolume] = useState(50); // Volume as percentage (0-100)
   const [editorReady, setEditorReady] = useState(false);
-   const [selectedTrack, setSelectedTrack] = useState('stranger'); // Default to stranger track
+  const [selectedTrack, setSelectedTrack] = useState('stranger'); // Default to stranger track
   const [musicElements, setMusicElements] = useState([]); // Store added music elements
   const [state, setState] = useState('stop');
 
@@ -262,6 +221,9 @@ export default function StrudelDemo() {
               </div>
             </div>
             <div className="col-md-4 d-flex flex-column gap-3">
+              {/* Track Info */}
+              <TrackInfo selectedTrack={selectedTrack} />
+
               {/* Keyboard Shortcuts */}
               <KeyboardShortcuts />
 
