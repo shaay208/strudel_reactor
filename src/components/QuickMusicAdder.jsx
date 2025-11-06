@@ -14,7 +14,19 @@ const QuickMusicAdder = ({
       code: 's("bd*4").bank("RolandTR909").gain(0.8)',
       icon: 'bi-disc',
       type: 'drums',
-    }
+    },
+    {
+      name: 'Hi-Hat',
+      code: 's("hh*8").bank("RolandTR909").gain(0.4)',
+      icon: 'bi-music-note-beamed',
+      type: 'drums',
+    },
+    {
+      name: 'Pad',
+      code: 'note("c3 eb3 g3").slow(2).sound("pad").room(0.6).gain(0.4)',
+      icon: 'bi-cloud-music',
+      type: 'melody',
+    },
   ];
 
   const handleQuickAdd = (preset) => {
