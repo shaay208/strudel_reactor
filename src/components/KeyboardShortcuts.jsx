@@ -1,6 +1,6 @@
 import React from 'react';
 
-function KeyboardShortcuts() {
+const KeyboardShortcuts = () => {
   return (
     <div className="card glass-card">
       <div className="card-header text-primary fw-bold gradient-header d-flex align-items-center">

@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 // Import subscribe/unsubscribe to listen for music events
 import { subscribe, unsubscribe } from '../console-monkey-patch';
 
-export default function Graph() {
+const Graph = () => {
   const [rngNumber, setRngNumber] = useState(0);
   const [rngArray, setRngArray] = useState([]);
   // Track the last music event string
@@ -263,3 +263,4 @@ export default function Graph() {
     </div>
   );
 }
+export default Graph;

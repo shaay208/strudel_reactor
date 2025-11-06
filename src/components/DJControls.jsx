@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { tracks } from '../tunes';
 
-function DJControls({
+const DJControls = ({
   volume,
   onVolumeChange,
   selectedTrack,
@@ -10,7 +10,7 @@ function DJControls({
   onBpmChange,
   p1Mode,
   onP1ModeChange,
-}) {
+}) => {
   const [localBpm, setLocalBpm] = useState(120);
 
   const currentTrack =

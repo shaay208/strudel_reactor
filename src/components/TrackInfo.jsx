@@ -1,7 +1,7 @@
 import React from 'react';
 import { getTrackById } from '../tunes';
 
-function TrackInfo({ selectedTrack, currentBpm  }) {
+const TrackInfo = ({ selectedTrack, currentBpm  }) => {
   const track = getTrackById(selectedTrack);
 
   if (!track) return null;
@@ -61,7 +61,7 @@ function TrackInfo({ selectedTrack, currentBpm  }) {
         <div className="row text-center">
           <div className="col-4">
             <div className="border-end">
-              <i className="bi bi-music-note d-block fs-4 text-primary"></i>
+              <i className="bi bi-music-note d-block fs-4 text-primary animate__animated animate__bounce animate__infinite animate__slow"></i>
               <small className="text-muted">Track</small>
             </div>
           </div>
