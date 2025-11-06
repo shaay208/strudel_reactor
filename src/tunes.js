@@ -161,16 +161,16 @@ samples('github:algorave-dave/samples')
 samples('https://raw.githubusercontent.com/tidalcycles/Dirt-Samples/master/strudel.json')
 
 stack(
-  s("bd ~ sn ~").bank("Jazz").gain(0.7),
-  s("hh*8").bank("Jazz").gain(0.4).sometimes(jux(rev)),
+  s("bd ~ sn ~").bank("RolandTR909").gain(0.7),
+  s("hh*8").bank("RolandTR909").gain(0.4).sometimes(jux(rev)),
   note("c3 d3 eb3 f3 g3 a3 bb3")
-    .sound("electric")
+    .sound("sine")
     .struct("x x ~ x ~ x x ~")
     .lpf(1200)
     .gain(0.5),
   note("c4 eb4 g4")
     .slow(2)
-    .sound("rhodes")
+    .sound("pad")
     .room(0.4)
     .gain(0.4)
 )
