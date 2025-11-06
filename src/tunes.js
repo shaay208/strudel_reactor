@@ -103,3 +103,131 @@ stack(
 // all(x => x.log())
 
 // @version 1.2`;
+
+export const techno_beat = `setcps(130/60/4)
+
+samples('github:algorave-dave/samples')
+samples('https://raw.githubusercontent.com/tidalcycles/Dirt-Samples/master/strudel.json')
+samples('https://raw.githubusercontent.com/Mittans/tidal-drum-machines/main/machines/tidal-drum-machines.json')
+
+stack(
+  s("bd*4").bank("RolandTR909").gain(0.8).room(0.2),
+  s("~ hh ~ hh").bank("RolandTR909").gain(0.6).lpf(8000),
+  s("~ ~ sn ~").bank("RolandTR909").gain(0.7).room(0.3),
+  s("oh*8").bank("RolandTR909").gain(0.3).sometimes(rev),
+  note("c2 [eb2 f2] g2 [bb2 c3]")
+    .sound("sawtooth")
+    .lpf(400)
+    .resonance(10)
+    .gain(0.4)
+)
+// @version 1.0`;
+
+export const ambient_dream = `setcps(90/60/4)
+
+samples('github:algorave-dave/samples')
+samples('https://raw.githubusercontent.com/tidalcycles/Dirt-Samples/master/strudel.json')
+
+stack(
+  note("c3 eb3 g3 bb3")
+    .slow(4)
+    .sound("pad")
+    .room(0.8)
+    .size(0.9)
+    .gain(0.6)
+    .lpf(sine.range(200, 800).slow(8)),
+  
+  s("~ ~ ~ bd").gain(0.3).room(0.6),
+  
+  note("c5 d5 eb5 f5 g5")
+    .sometimes(rev)
+    .sound("sine")
+    .gain(0.2)
+    .delay(0.3)
+    .delayt(0.125)
+    .delayfb(0.6)
+    .struct("x?0.3")
+)
+// @version 1.0`;
+
+export const jazz_fusion = `setcps(120/60/4)
+
+samples('github:algorave-dave/samples')
+samples('https://raw.githubusercontent.com/tidalcycles/Dirt-Samples/master/strudel.json')
+
+stack(
+  s("bd ~ sn ~").bank("Jazz").gain(0.7),
+  s("hh*8").bank("Jazz").gain(0.4).sometimes(jux(rev)),
+  note("c3 d3 eb3 f3 g3 a3 bb3")
+    .sound("electric")
+    .struct("x x ~ x ~ x x ~")
+    .lpf(1200)
+    .gain(0.5),
+  note("c4 eb4 g4")
+    .slow(2)
+    .sound("rhodes")
+    .room(0.4)
+    .gain(0.4)
+)
+// @version 1.0`;
+
+export const drum_n_bass = `setcps(174/60/4)
+
+samples('github:algorave-dave/samples')
+samples('https://raw.githubusercontent.com/tidalcycles/Dirt-Samples/master/strudel.json')
+
+stack(
+  s("bd ~ bd ~").speed(1.2).gain(0.8).lpf(120),
+  s("~ sn ~ sn").speed(1.1).gain(0.9).room(0.2),
+  s("hh*16").gain(0.3).sometimes(jux(rev)),
+  note("a1 c2 d2 f2")
+    .sound("reese")
+    .lpf(300)
+    .resonance(15)
+    .gain(0.6)
+    .struct("x ~ x x ~ x ~ x")
+)
+// @version 1.0`;
+
+// Track definitions with metadata
+export const tracks = [
+  {
+    id: 'stranger',
+    name: 'Stranger Things',
+    code: stranger_tune,
+    genre: 'Synthwave',
+    bpm: 140,
+  },
+  {
+    id: 'techno',
+    name: 'Techno Beat',
+    code: techno_beat,
+    genre: 'Techno',
+    bpm: 130,
+  },
+  {
+    id: 'ambient',
+    name: 'Ambient Dream',
+    code: ambient_dream,
+    genre: 'Ambient',
+    bpm: 90,
+  },
+  {
+    id: 'jazz',
+    name: 'Jazz Fusion',
+    code: jazz_fusion,
+    genre: 'Jazz Fusion',
+    bpm: 120,
+  },
+  {
+    id: 'dnb',
+    name: 'Drum & Bass',
+    code: drum_n_bass,
+    genre: 'Drum & Bass',
+    bpm: 174,
+  },
+];
+
+export const getTrackById = (id) => {
+  return tracks.find((track) => track.id === id) || tracks[0];
+};

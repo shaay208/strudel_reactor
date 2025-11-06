@@ -12,7 +12,7 @@ import {
 } from '@strudel/webaudio';
 import { registerSoundfonts } from '@strudel/soundfonts';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import { stranger_tune } from './tunes';
+import { stranger_tune, getTrackById } from './tunes';
 import console_monkey_patch, { getD3Data } from './console-monkey-patch';
 import DJControls from './components/DJControls';
 import PlayButtons from './components/PlayButtons';
@@ -103,7 +103,8 @@ export default function StrudelDemo() {
   const [procText, setProcText] = useState(stranger_tune);
   const [volume, setVolume] = useState(50); // Volume as percentage (0-100)
   const [editorReady, setEditorReady] = useState(false);
-
+   const [selectedTrack, setSelectedTrack] = useState('stranger'); // Default to stranger track
+  const [musicElements, setMusicElements] = useState([]); // Store added music elements
   const [state, setState] = useState('stop');
 
   const handlePlay = () => {
@@ -116,6 +117,26 @@ export default function StrudelDemo() {
     let outputText = preProcess(procText, volumeDecimal);
     globalEditor.setCode(outputText);
     globalEditor.evaluate();
+  };
+
+  const handleTrackChange = (trackId) => {
+    const track = getTrackById(trackId);
+    if (track) {
+      setSelectedTrack(trackId);
+      setSongText(track.code);
+      setProcText(track.code);
+      setMusicElements([]); // Clear music elements when switching tracks
+
+      // Update editor if ready
+      if (globalEditor && editorReady) {
+        globalEditor.setCode(track.code);
+        // Auto-stop current playback when switching tracks
+        if (state === 'play') {
+          globalEditor.stop();
+          setState('stop');
+        }
+      }
+    }
   };
 
   const handleStop = () => {
@@ -304,6 +325,8 @@ export default function StrudelDemo() {
                   <DJControls
                     volume={volume}
                     onVolumeChange={(e) => setVolume(e.target.value)}
+                    selectedTrack={selectedTrack}
+                    onTrackChange={handleTrackChange}
                   />
                 </div>
               </div>
