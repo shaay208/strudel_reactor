@@ -66,92 +66,61 @@ export default function StrudelDemo() {
   const [musicElements, setMusicElements] = useState([]); // Store added music elements
   const [state, setState] = useState('stop');
 
-  const handleTrackChange = useCallback((trackId) => {
-    const track = getTrackById(trackId);
-    if (track) {
-      setSelectedTrack(trackId);
-      setSongText(track.code);
-      setProcText(track.code);
-      setMusicElements([]); // Clear music elements when switching tracks
+  const handleTrackChange = useCallback(
+    (trackId) => {
+      const track = getTrackById(trackId);
+      if (track) {
+        setSelectedTrack(trackId);
+        setSongText(track.code);
+        setProcText(track.code);
+        setMusicElements([]); // Clear music elements when switching tracks
 
-      // Update editor if ready
-      if (globalEditor && editorReady) {
-        globalEditor.setCode(track.code);
-        // Auto-stop current playback when switching tracks
-        if (state === 'play') {
-          globalEditor.stop();
-          setState('stop');
+        // Update editor if ready
+        if (globalEditor && editorReady) {
+          globalEditor.setCode(track.code);
+          // Auto-stop current playback when switching tracks
+          if (state === 'play') {
+            globalEditor.stop();
+            setState('stop');
+          }
         }
       }
-    }
-  }, [editorReady, state]);
+    },
+    [editorReady, state]
+  );
 
-  const handleTrackNext = useCallback(() => {
-    const currentIndex = tracks.findIndex(
-      (track) => track.id === selectedTrack
-    );
-    const nextIndex = (currentIndex + 1) % tracks.length;
-    handleTrackChange(tracks[nextIndex].id);
-  }, [selectedTrack, handleTrackChange]);
+  const updatePlayingTrack = useCallback(
+    (elements = musicElements) => {
+      if (!globalEditor || !editorReady) return;
 
-  const handleTrackPrev = useCallback(() => {
-    const currentIndex = tracks.findIndex(
-      (track) => track.id === selectedTrack
-    );
-    const prevIndex = currentIndex === 0 ? tracks.length - 1 : currentIndex - 1;
-    handleTrackChange(tracks[prevIndex].id);
-  }, [selectedTrack, handleTrackChange]);
+      const volumeDecimal = volume / 100;
+      let baseCode = preProcess(procText, volumeDecimal);
 
-  const handleVolumeUp = useCallback(() => {
-    setVolume((prev) => Math.min(100, prev + 10));
-  }, []);
+      // If there are music elements, add them as additional named parts
+      if (elements.length > 0) {
+        const elementCodes = elements
+          .map(
+            (element, index) => `added_element_${index + 1}: ${element.code}`
+          )
+          .join('\n\n');
 
-  const handleVolumeDown = useCallback(() => {
-    setVolume((prev) => Math.max(0, prev - 10));
-  }, []);
+        // Simply append the elements to the base code
+        baseCode += '\n\n// === Added Elements ===\n' + elementCodes;
+      }
 
-  const handleAddMusicElement = useCallback((elementCode, elementName) => {
-    const newElement = {
-      id: Date.now(),
-      name: elementName,
-      code: elementCode,
-    };
-
-    setMusicElements((prev) => [...prev, newElement]);
-
-    // If currently playing, update the track with the new element
-    if (state === 'play' && globalEditor && editorReady) {
-      updatePlayingTrack([...musicElements, newElement]);
-    }
-  }, [state, editorReady, musicElements]);
-
-  const updatePlayingTrack = useCallback((elements = musicElements) => {
-    if (!globalEditor || !editorReady) return;
-    
-    const volumeDecimal = volume / 100;
-    let baseCode = preProcess(procText, volumeDecimal);
-
-    // If there are music elements, add them as additional named parts
-    if (elements.length > 0) {
-      const elementCodes = elements
-        .map((element, index) => `added_element_${index + 1}: ${element.code}`)
-        .join('\n\n');
-      
-      // Simply append the elements to the base code
-      baseCode += '\n\n// === Added Elements ===\n' + elementCodes;
-    }
-    
-    globalEditor.setCode(baseCode);
-    globalEditor.evaluate();
-  }, [musicElements, editorReady, volume, procText]);
+      globalEditor.setCode(baseCode);
+      globalEditor.evaluate();
+    },
+    [musicElements, editorReady, volume, procText]
+  );
 
   // Handle processing the text (preprocess function)
   const handleProcess = useCallback(() => {
     if (!globalEditor || !editorReady) return;
-    
+
     const volumeDecimal = volume / 100;
     let outputText = preProcess(procText, volumeDecimal);
-    
+
     // Add music elements if any exist
     if (musicElements.length > 0) {
       const elementCodes = musicElements
@@ -159,7 +128,7 @@ export default function StrudelDemo() {
         .join('\n\n');
       outputText += '\n\n// === Added Elements ===\n' + elementCodes;
     }
-    
+
     globalEditor.setCode(outputText);
   }, [editorReady, volume, procText, musicElements]);
 
@@ -282,108 +251,175 @@ export default function StrudelDemo() {
 
   return (
     <div className="bg-light min-vh-100 py-4">
-      <div className="container  py-4">
+      <div className="container py-4">
         <h2 className="text-center mb-4 text-primary fw-bold">Strudel Demo</h2>
         <main className="main-panel">
-          <div className="row g-3 mb-4">
-            <div className="col-md-8">
-              <div className="card glass-card h-100">
-                <div className="card-header gradient-header">
-                  <h6 className="text-primary fw-bold">Text to preprocess:</h6>
-                </div>
-                <div className="card-body ">
-                  <PreprocessTextarea
-                    defaultValue={songText}
-                    onChange={(e) => {
-                      setSongText(e.target.value);
-                      setProcText(e.target.value);
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4 d-flex flex-column gap-3">
-              {/* Track Info */}
-              <TrackInfo selectedTrack={selectedTrack} />
-
-              {/* Keyboard Shortcuts */}
-              <KeyboardShortcuts />
-
-              {/* Processing Buttons */}
-              <div className="card glass-card">
-                <div className="card-header  text-primary fw-bold gradient-header">
-                  Processing
-                </div>
-                <div className="card-body">
-                  <ProcButtons 
-                    onProcess={handleProcess}
-                    onProcessAndPlay={handleProcessAndPlay}
-                  />
-                </div>
-              </div>
-
-              <div className="card glass-card flex-grow-1">
-                <div className="card-header text-primary fw-bold gradient-header">
-                  Graph
-                </div>
-                <div className="card-body scrollable">
-                  <Graph />
-                </div>
-              </div>
-              {/* play buttons */}
-              <div className="card glass-card">
-                <div className="card-header text-primary fw-bold gradient-header">
-                  Playback
-                </div>
-                <div className="card-body d-flex justify-content-center">
-                  <PlayButtons
-                    onPlay={() => {
-                      setState('play');
-                      handlePlay();
-                    }}
-                    onStop={() => {
-                      setState('stop');
-                      handleStop();
-                    }}
-                    disabled={!editorReady}
-                  />
+          {/* Code Editing Accordion Only */}
+          <div className="accordion mb-4" id="codeAccordion">
+            <div className="accordion-item">
+              <h2 className="accordion-header" id="codeHeading">
+                <button
+                  className="accordion-button"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#codeCollapse"
+                  aria-expanded="true"
+                  aria-controls="codeCollapse"
+                >
+                  <i className="bi bi-code-square me-2"></i>
+                  <strong>Code Editor & Text Preprocessing</strong>
+                </button>
+              </h2>
+              <div
+                id="codeCollapse"
+                className="accordion-collapse collapse show"
+                aria-labelledby="codeHeading"
+                data-bs-parent="#codeAccordion"
+              >
+                <div className="accordion-body">
+                  <div className="row g-3">
+                    <div className="col-md-6">
+                      <div
+                        className="card glass-card"
+                        style={{ height: '400px' }}
+                      >
+                        <div className="card-header gradient-header">
+                          <h6 className="text-primary fw-bold mb-0">
+                            <i className="bi bi-file-text me-2"></i>Text to
+                            preprocess:
+                          </h6>
+                        </div>
+                        <div className="card-body p-2">
+                          <PreprocessTextarea
+                            defaultValue={songText}
+                            onChange={(e) => {
+                              setSongText(e.target.value);
+                              setProcText(e.target.value);
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <div
+                        className="card glass-card"
+                        style={{ height: '400px' }}
+                      >
+                        <div className="card-header text-primary fw-bold gradient-header">
+                          <h6 className="mb-0">
+                            <i className="bi bi-terminal me-2"></i>Editor
+                          </h6>
+                        </div>
+                        <div
+                          className="card-body p-2"
+                          style={{
+                            height: '350px',
+                            overflow: 'auto',
+                            backgroundColor: '#1e1e1e',
+                            border: 'none',
+                          }}
+                        >
+                          <div
+                            id="editor"
+                            style={{
+                              height: '100%',
+                              backgroundColor: '#1e1e1e',
+                              minHeight: '100%',
+                            }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="row g-3 mb-3">
-            <div className="col-md-8">
-              <div className="card glass-card mb-3">
-                <div className="card-header text-primary fw-bold gradient-header">
-                  Editor
+
+          {/* Regular Layout for Other Components */}
+          <div className="row g-3 mb-4">
+            <div className="col-lg-3 col-md-6">
+              <div className="d-flex flex-column gap-3 h-100">
+                {/* Track Info */}
+                <TrackInfo selectedTrack={selectedTrack} />
+
+                {/* Processing Buttons */}
+                <div className="card glass-card">
+                  <div className="card-header text-primary fw-bold gradient-header">
+                    <i className="bi bi-gear me-2"></i>Processing
+                  </div>
+                  <div className="card-body">
+                    <ProcButtons
+                      onProcess={handleProcess}
+                      onProcessAndPlay={handleProcessAndPlay}
+                    />
+                  </div>
                 </div>
-                <div className="card-body scrollable">
-                  <div id="editor" />
+
+                {/* Play buttons */}
+                <div className="card glass-card">
+                  <div className="card-header text-primary fw-bold gradient-header">
+                    <i className="bi bi-play me-2"></i>Playback
+                  </div>
+                  <div className="card-body d-flex justify-content-center">
+                    <PlayButtons
+                      onPlay={() => {
+                        setState('play');
+                        handlePlay();
+                      }}
+                      onStop={() => {
+                        setState('stop');
+                        handleStop();
+                      }}
+                      disabled={!editorReady}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="col-md-4">
-              <div className="card glass-card h-100">
-                <div className="card-header text-primary fw-bold d-flex justify-content-center gradient-header">
-                 DJ Controls
+            <div className="col-lg-3 col-md-6">
+              <div className="d-flex flex-column gap-3 h-100">
+                {/* DJ Controls */}
+                <div className="card glass-card">
+                  <div className="card-header text-primary fw-bold gradient-header">
+                    <i className="bi bi-mixer2 me-2"></i>DJ Controls
+                  </div>
+                  <div className="card-body">
+                    <DJControls
+                      volume={volume}
+                      onVolumeChange={(e) => setVolume(e.target.value)}
+                      selectedTrack={selectedTrack}
+                      onTrackChange={handleTrackChange}
+                    />
+                  </div>
                 </div>
-                <div className="card-body">
-                  <DJControls
-                    volume={volume}
-                    onVolumeChange={(e) => setVolume(e.target.value)}
-                    selectedTrack={selectedTrack}
-                    onTrackChange={handleTrackChange}
+
+                {/* Keyboard Shortcuts */}
+                <KeyboardShortcuts />
+              </div>
+            </div>
+
+            <div className="col-lg-6">
+              <div className="d-flex flex-column gap-3 h-100">
+                {/* Graph */}
+                <div className="card glass-card flex-grow-1">
+                  <div className="card-header text-primary fw-bold gradient-header">
+                    <i className="bi bi-graph-up me-2"></i>Real-time Graph
+                  </div>
+                  <div className="card-body">
+                    <Graph />
+                  </div>
+                </div>
+                {/* Canvas */}
+                <div className="card-body d-flex justify-content-center align-items-center">
+                  <canvas
+                    id="roll"
+                    className="w-100 rounded canvas-glow"
+                    style={{ height: '300px' }}
                   />
                 </div>
               </div>
-            </div>
-            <div className="card-body d-flex justify-content-center">
-              <canvas
-                id="roll"
-                className="w-100 rounded canvas-glow"
-                style={{ height: '300px' }}
-              />
             </div>
           </div>
         </main>

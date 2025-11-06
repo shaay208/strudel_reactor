@@ -80,7 +80,7 @@ export default function Graph() {
 
   useEffect(() => {
     // Select SVG and clear
-    const svg = d3.select('svg');
+    const svg = d3.select('#graph-svg');
     if (!svg.node() || !rngArray || rngArray.length === 0) {
       svg.selectAll('*').remove();
       return;
@@ -234,6 +234,7 @@ export default function Graph() {
       </div>
       <div className="row">
         <svg
+          id="graph-svg"
           width="100%"
           height="200px"
           className="border border-primary rounded p-2"
