@@ -15,12 +15,9 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import { stranger_tune, tracks, getTrackById } from './tunes';
 import console_monkey_patch from './console-monkey-patch';
 import DJControls from './components/DJControls';
-import PlayButtons from './components/PlayButtons';
-import ProcButtons from './components/ProcButtons';
 import PreprocessTextarea from './components/PreprocessTextarea';
-import Graph from './components/Graph';
-import TrackInfo from './components/TrackInfo';
 import KeyboardShortcuts from './components/KeyboardShortcuts';
+import MusicPlayer from './components/MusicPlayer';
 import { preProcess } from './utils/PreProcessLogic';
 
 let globalEditor = null;
@@ -338,47 +335,22 @@ export default function StrudelDemo() {
 
           {/* Regular Layout for Other Components */}
           <div className="row g-3 mb-4">
-            <div className="col-lg-3 col-md-6">
-              <div className="d-flex flex-column gap-3 h-100">
-                {/* Track Info */}
-                <TrackInfo selectedTrack={selectedTrack} />
-
-                {/* Processing Buttons */}
-                <div className="card glass-card">
-                  <div className="card-header text-primary fw-bold gradient-header">
-                    <i className="bi bi-gear me-2"></i>Processing
-                  </div>
-                  <div className="card-body">
-                    <ProcButtons
-                      onProcess={handleProcess}
-                      onProcessAndPlay={handleProcessAndPlay}
-                    />
-                  </div>
-                </div>
-
-                {/* Play buttons */}
-                <div className="card glass-card">
-                  <div className="card-header text-primary fw-bold gradient-header">
-                    <i className="bi bi-play me-2"></i>Playback
-                  </div>
-                  <div className="card-body d-flex justify-content-center">
-                    <PlayButtons
-                      onPlay={() => {
-                        setState('play');
-                        handlePlay();
-                      }}
-                      onStop={() => {
-                        setState('stop');
-                        handleStop();
-                      }}
-                      disabled={!editorReady}
-                    />
-                  </div>
-                </div>
-              </div>
+            {/* Left Column - Music Player Component */}
+            <div className="col-lg-8">
+              <MusicPlayer
+                state={state}
+                selectedTrack={selectedTrack}
+                handleProcess={handleProcess}
+                handleProcessAndPlay={handleProcessAndPlay}
+                handlePlay={handlePlay}
+                handleStop={handleStop}
+                setState={setState}
+                editorReady={editorReady}
+              />
             </div>
 
-            <div className="col-lg-3 col-md-6">
+            {/* Right Column - DJ Controls */}
+            <div className="col-lg-4">
               <div className="d-flex flex-column gap-3 h-100">
                 {/* DJ Controls */}
                 <div className="card glass-card">
@@ -397,28 +369,12 @@ export default function StrudelDemo() {
 
                 {/* Keyboard Shortcuts */}
                 <KeyboardShortcuts />
-              </div>
-            </div>
 
-            <div className="col-lg-6">
-              <div className="d-flex flex-column gap-3 h-100">
-                {/* Graph */}
-                <div className="card glass-card flex-grow-1">
-                  <div className="card-header text-primary fw-bold gradient-header">
-                    <i className="bi bi-graph-up me-2"></i>Real-time Graph
-                  </div>
-                  <div className="card-body">
-                    <Graph />
-                  </div>
-                </div>
-                {/* Canvas */}
-                <div className="card-body d-flex justify-content-center align-items-center">
-                  <canvas
-                    id="roll"
-                    className="w-100 rounded canvas-glow"
-                    style={{ height: '300px' }}
-                  />
-                </div>
+                <canvas
+                  id="roll"
+                  className="w-100 rounded canvas-glow display-none"
+                  style={{ height: '200px' }}
+                />
               </div>
             </div>
           </div>

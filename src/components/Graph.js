@@ -184,55 +184,75 @@ export default function Graph() {
     <div className="App container">
       <div className="row">
         <div className="col-12">
-          <div className="card mb-3">
-            <div className="card-body">
-              <p>
-                <strong>Total Events:</strong> {totalEvents} |{' '}
-                <strong>Graph Points:</strong> {rngArray.length}/{maxItems}
-              </p>
-              <p>
-                <strong>Clear in:</strong>{' '}
-                <span
-                  className={`badge ${
-                    eventsUntilClear <= 10 ? 'bg-danger' : 'bg-info'
-                  }`}
+          <div className="accordion" id="graphAccordion">
+            <div className="accordion-item">
+              <h2 className="accordion-header">
+                <button
+                  className="accordion-button"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#collapseGraphStats"
+                  aria-expanded="true"
+                  aria-controls="collapseGraphStats"
                 >
-                  {eventsUntilClear}
-                </span>{' '}
-                events
-              </p>
-              <p>
-                <strong>Last Value:</strong>{' '}
-                <span className="badge bg-success">{rngNumber}</span>
-              </p>
-              <p className="mb-0">
-                <strong>Last Hap:</strong>{' '}
-                <small
-                  className="text-muted d-inline-block"
-                  style={{
-                    maxWidth: '200px',
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    verticalAlign: 'top',
-                  }}
-                  title={lastHap || 'Waiting for data...'}
-                >
-                  {lastHap
-                    ? lastHap.length > 30
-                      ? lastHap.substring(0, 30) + '...'
-                      : lastHap
-                    : 'Waiting for data...'}
-                </small>
-              </p>
+                  Graph Statistics
+                </button>
+              </h2>
+              <div
+                id="collapseGraphStats"
+                className="accordion-collapse collapse show"
+                data-bs-parent="#graphAccordion"
+              >
+                <div className="accordion-body">
+                  <p>
+                    <strong>Total Events:</strong> {totalEvents} |{' '}
+                    <strong>Graph Points:</strong> {rngArray.length}/{maxItems}
+                  </p>
+                  <p>
+                    <strong>Clear in:</strong>{' '}
+                    <span
+                      className={`badge ${
+                        eventsUntilClear <= 10 ? 'bg-danger' : 'bg-info'
+                      }`}
+                    >
+                      {eventsUntilClear}
+                    </span>{' '}
+                    events
+                  </p>
+                  <p>
+                    <strong>Last Value:</strong>{' '}
+                    <span className="badge bg-success">{rngNumber}</span>
+                  </p>
+                  <p className="mb-0">
+                    <strong>Last Hap:</strong>{' '}
+                    <small
+                      className="text-muted d-inline-block"
+                      style={{
+                        maxWidth: '200px',
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        verticalAlign: 'top',
+                      }}
+                      title={lastHap || 'Waiting for data...'}
+                    >
+                      {lastHap
+                        ? lastHap.length > 30
+                          ? lastHap.substring(0, 30) + '...'
+                          : lastHap
+                        : 'Waiting for data...'}
+                    </small>
+                  </p>
+                  <div className="alert alert-warning mt-3">
+                    <strong>Current Graph Data:</strong> [{rngArray.join(', ')}]
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="alert alert-warning">
-            <strong>Current Graph Data:</strong> [{rngArray.join(', ')}]
           </div>
         </div>
       </div>
-      <div className="row">
+      <div className="row mt-3">
         <svg
           id="graph-svg"
           width="100%"
