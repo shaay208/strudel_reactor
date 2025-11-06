@@ -1,7 +1,7 @@
 import './App.css';
 import { useEffect, useRef, useState } from 'react';
 import { StrudelMirror } from '@strudel/codemirror';
-import { evalScope, v } from '@strudel/core';
+import { evalScope } from '@strudel/core';
 import { drawPianoroll } from '@strudel/draw';
 import { initAudioOnFirstClick } from '@strudel/webaudio';
 import { transpiler } from '@strudel/transpiler';
@@ -19,6 +19,7 @@ import PlayButtons from './components/PlayButtons';
 import ProcButtons from './components/ProcButtons';
 import PreprocessTextarea from './components/PreprocessTextarea';
 import Graph from './components/Graph';
+import KeyboardShortcuts from './components/KeyboardShortcuts';
 import { preProcess } from './utils/PreProcessLogic';
 
 let globalEditor = null;
@@ -135,6 +136,27 @@ export default function StrudelDemo() {
     }
   }, [volume, procText, state, editorReady]);
 
+  // Keyboard shortcuts: Ctrl+Enter to Play, Ctrl+. to Stop
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      // Ctrl + Enter → Play
+      if (e.ctrlKey && e.key === 'Enter') {
+        e.preventDefault();
+        setState('play');
+        handlePlay();
+      }
+      // Ctrl + . → Stop
+      if (e.ctrlKey && e.key === '.') {
+        e.preventDefault();
+        setState('stop');
+        handleStop();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [editorReady, procText, volume]);
+
   useEffect(() => {
     if (!hasRun.current) {
       console_monkey_patch();
@@ -219,6 +241,9 @@ export default function StrudelDemo() {
               </div>
             </div>
             <div className="col-md-4 d-flex flex-column gap-3">
+              {/* Keyboard Shortcuts */}
+              <KeyboardShortcuts />
+
               {/* Processing Buttons */}
               <div className="card glass-card">
                 <div className="card-header  text-primary fw-bold gradient-header">
@@ -276,7 +301,10 @@ export default function StrudelDemo() {
                   DJ Controls
                 </div>
                 <div className="card-body">
-                  <DJControls volume={volume} onVolumeChange={(e) => setVolume(e.target.value)} />
+                  <DJControls
+                    volume={volume}
+                    onVolumeChange={(e) => setVolume(e.target.value)}
+                  />
                 </div>
               </div>
             </div>
