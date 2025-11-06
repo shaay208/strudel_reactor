@@ -22,10 +22,52 @@ const QuickMusicAdder = ({
       type: 'drums',
     },
     {
+      name: 'Snare',
+      code: 's("~ sn ~ sn").bank("RolandTR909").gain(0.7)',
+      icon: 'bi-music-note',
+      type: 'drums',
+    },
+    {
+      name: 'Bass',
+      code: 'note("c1 ~ c1 ~").sound("sine").lpf(200).gain(0.6)',
+      icon: 'bi-boombox',
+      type: 'bass',
+    },
+    {
+      name: 'Synth',
+      code: 'note("c4 e4 g4 b4").sound("sine").gain(0.3).struct("x ~ x ~")',
+      icon: 'bi-keyboard',
+      type: 'melody',
+    },
+    {
       name: 'Pad',
       code: 'note("c3 eb3 g3").slow(2).sound("pad").room(0.6).gain(0.4)',
-      icon: 'bi-cloud-music',
+      icon: 'bi bi-dpad',
       type: 'melody',
+    },
+    {
+      name: 'FX',
+      code: 's("white").lpf(sine.range(200, 2000).slow(4)).gain(0.2).struct("x?0.1")',
+      icon: 'bi-stars',
+      type: 'effects',
+    },
+    {
+      name: 'Cymbal',
+      code: 's("cymbal").slow(4).gain(0.3).struct("~ ~ ~ x")',
+      icon: 'bi-soundwave',
+      type: 'drums',
+    },
+    {
+        name: 'Clap',
+      code: 's("clap").gain(0.5)',
+      icon: 'bi bi-hand-index-thumb',
+      type: 'drums',
+    },
+    {
+      name: 'Jazz',
+      code: 'n("0 1 [4 3] 2 0 2 [~ 3] 4").sound("jazz").rev().gain(0.4)',
+      icon: 'bi bi-rocket-takeoff',
+      type: 'jazz',
     },
   ];
 
