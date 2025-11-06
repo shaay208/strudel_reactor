@@ -18,6 +18,7 @@ import DJControls from './components/DJControls';
 import PreprocessTextarea from './components/PreprocessTextarea';
 import KeyboardShortcuts from './components/KeyboardShortcuts';
 import MusicPlayer from './components/MusicPlayer';
+import QuickMusicAdder from './components/QuickMusicAdder';
 import { preProcess } from './utils/PreProcessLogic';
 
 let globalEditor = null;
@@ -88,24 +89,25 @@ export default function StrudelDemo() {
     [editorReady, state]
   );
 
+  // Music Elements handlers
+  const handleAddMusic = useCallback((element) => {
+    setMusicElements((prev) => [...prev, element]);
+  }, []);
+
+  const handleRemoveMusic = useCallback((elementId) => {
+    setMusicElements((prev) => prev.filter((el) => el.id !== elementId));
+  }, []);
+
+  const handleClearAllMusic = useCallback(() => {
+    setMusicElements([]);
+  }, []);
+
   const updatePlayingTrack = useCallback(
     (elements = musicElements) => {
       if (!globalEditor || !editorReady) return;
 
       const volumeDecimal = volume / 100;
-      let baseCode = preProcess(procText, volumeDecimal, bpm);
-
-      // If there are music elements, add them as additional named parts
-      if (elements.length > 0) {
-        const elementCodes = elements
-          .map(
-            (element, index) => `added_element_${index + 1}: ${element.code}`
-          )
-          .join('\n\n');
-
-        // Simply append the elements to the base code
-        baseCode += '\n\n// === Added Elements ===\n' + elementCodes;
-      }
+      let baseCode = preProcess(procText, volumeDecimal, bpm, elements);
 
       globalEditor.setCode(baseCode);
       globalEditor.evaluate();
@@ -118,15 +120,7 @@ export default function StrudelDemo() {
     if (!globalEditor || !editorReady) return;
 
     const volumeDecimal = volume / 100;
-    let outputText = preProcess(procText, volumeDecimal, bpm);
-
-    // Add music elements if any exist
-    if (musicElements.length > 0) {
-      const elementCodes = musicElements
-        .map((element, index) => `added_element_${index + 1}: ${element.code}`)
-        .join('\n\n');
-      outputText += '\n\n// === Added Elements ===\n' + elementCodes;
-    }
+    let outputText = preProcess(procText, volumeDecimal, bpm, musicElements);
 
     globalEditor.setCode(outputText);
   }, [editorReady, volume, procText, musicElements, bpm]);
@@ -158,13 +152,21 @@ export default function StrudelDemo() {
 
   useEffect(() => {
     if (state === 'play' && editorReady && globalEditor) {
+      // Re-trigger playback when music elements change during play
+      updatePlayingTrack();
+    }
+  }, [musicElements, state, editorReady, updatePlayingTrack]);
+
+  useEffect(() => {
+    if (state === 'play' && editorReady && globalEditor) {
       // Only re-run when volume or bpm changes during playback
       const volumeDecimal = volume / 100;
-      let outputText = preProcess(procText, volumeDecimal, bpm);
+      let outputText = preProcess(procText, volumeDecimal, bpm, musicElements);
+
       globalEditor.setCode(outputText);
       globalEditor.evaluate();
     }
-  }, [volume, bpm, procText, state, editorReady]);
+  }, [volume, bpm, procText, state, editorReady, musicElements]);
 
   // Keyboard shortcuts: Ctrl+Enter to Play, Ctrl+. to Stop
   useEffect(() => {
@@ -185,7 +187,7 @@ export default function StrudelDemo() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [editorReady, procText, volume]);
+  }, [handlePlay, handleStop]);
 
   useEffect(() => {
     if (!hasRun.current) {
@@ -338,7 +340,7 @@ export default function StrudelDemo() {
           {/* Regular Layout for Other Components */}
           <div className="row g-3 mb-4">
             {/* Left Column - Music Player Component */}
-            <div className="col-lg-8">
+            <div className="col-lg-6">
               <MusicPlayer
                 state={state}
                 selectedTrack={selectedTrack}
@@ -352,8 +354,18 @@ export default function StrudelDemo() {
               />
             </div>
 
+            {/* Middle Column - Music Adder */}
+            <div className="col-lg-3">
+              <QuickMusicAdder
+                musicElements={musicElements}
+                onAddMusic={handleAddMusic}
+                onRemoveMusic={handleRemoveMusic}
+                onClearAll={handleClearAllMusic}
+              />
+            </div>
+
             {/* Right Column - DJ Controls */}
-            <div className="col-lg-4">
+            <div className="col-lg-3">
               <div className="d-flex flex-column gap-3 h-100">
                 {/* DJ Controls */}
                 <div className="card glass-card">

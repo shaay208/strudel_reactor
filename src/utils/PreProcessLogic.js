@@ -1,4 +1,9 @@
-export const preProcess = (inputText, volume, bpm = 140) => {
+export const preProcess = (
+  inputText,
+  volume,
+  bpm = 140,
+  musicElements = []
+) => {
   let outputText = inputText + '\n// hello, this is a test';
   outputText += `\n//all(x => x.gain(${volume}))`;
   outputText = outputText.replaceAll('{$VOLUME}', volume);
@@ -40,6 +45,23 @@ export const preProcess = (inputText, volume, bpm = 140) => {
       /(?<!post)gain\(([\d.]+)\)/g,
       (match, captureGroup) => `gain(${captureGroup} * ${volume})`
     );
+  }
+
+  // Add music elements if any exist and apply volume to them
+  if (musicElements.length > 0) {
+    const elementCodes = musicElements
+      .map((element, index) => {
+        // Apply volume to each element's code
+        let elementCode = element.code;
+        elementCode = elementCode.replaceAll(
+          /(?<!post)gain\(([\d.]+)\)/g,
+          (match, captureGroup) => `gain(${captureGroup} * ${volume})`
+        );
+        return `added_element_${index + 1}: ${elementCode}`;
+      })
+      .join('\n\n');
+
+    matches3 += '\n\n// === Added Elements ===\n' + elementCodes;
   }
 
   console.log(matches3);
