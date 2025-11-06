@@ -1,14 +1,54 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { tracks } from '../tunes';
 
-function DJControls({ volume, onVolumeChange }) {
+function DJControls({
+  volume,
+  onVolumeChange,
+  selectedTrack,
+  onTrackChange,
+}) {
   const [bpm, setBpm] = useState(120);
   const [mode, setMode] = useState('ON');
 
+
+  const currentTrack =
+    tracks.find((track) => track.id === selectedTrack) || tracks[0];
+
+    useEffect(() => {
+      setBpm(currentTrack.bpm);
+    }, [currentTrack])
+    
+
   return (
     <div>
+      {/* Track Selection */}
+      <div className="mb-3">
+        <label htmlFor="trackSelect" className="form-label fw-semibold">
+          <i className="bi bi-music-note-beamed me-2"></i>Track Selection
+        </label>
+        <select
+          className="form-select"
+          id="trackSelect"
+          value={selectedTrack}
+          onChange={(e) => onTrackChange(e.target.value)}
+        >
+          {tracks.map((track) => (
+            <option key={track.id} value={track.id}>
+              {track.name} ({track.genre})
+            </option>
+          ))}
+        </select>
+        <small className="text-muted">
+          Current: {currentTrack.name} • {currentTrack.bpm} BPM •{' '}
+          {currentTrack.genre}
+        </small>
+      </div>
+
       {/* Mode Selection */}
       <div className="mb-3 text-center">
-        <h6 className="text-secondary">Mode</h6>
+        <h6 className="text-secondary">
+          <i className="bi bi-power me-2"></i>Mode
+        </h6>
         <div className="form-check form-check-inline">
           <input
             className="form-check-input"
@@ -19,7 +59,7 @@ function DJControls({ volume, onVolumeChange }) {
             onChange={() => setMode('ON')}
           />
           <label className="form-check-label" htmlFor="modeOn">
-            P1: ON
+            <i className="bi bi-play-circle me-1"></i>P1: ON
           </label>
         </div>
 
@@ -33,7 +73,7 @@ function DJControls({ volume, onVolumeChange }) {
             onChange={() => setMode('HUSH')}
           />
           <label className="form-check-label" htmlFor="modeHush">
-            P1: HUSH
+            <i className="bi bi-pause-circle me-1"></i>P1: HUSH
           </label>
         </div>
       </div>
@@ -41,7 +81,7 @@ function DJControls({ volume, onVolumeChange }) {
       {/* Volume Control */}
       <div className="mb-3">
         <label htmlFor="volumeControl" className="form-label fw-semibold">
-          Volume: {volume}%
+          <i className="bi bi-volume-up me-2"></i>Volume: {volume}%
         </label>
         <input
           type="range"
@@ -56,18 +96,29 @@ function DJControls({ volume, onVolumeChange }) {
       {/* BPM Control */}
       <div className="mb-3">
         <label htmlFor="bpmInput" className="form-label fw-semibold">
-          BPM
+          <i className="bi bi-speedometer2 me-2"></i>BPM
         </label>
-        <input
-          type="number"
-          className="form-control"
-          id="bpmInput"
-          min="60"
-          max="200"
-          value={bpm}
-          onChange={(e) => setBpm(parseInt(e.target.value) || 0)}
-        />
+        <div className="input-group">
+          <input
+            type="number"
+            className="form-control"
+            id="bpmInput"
+            min="60"
+            max="200"
+            value={bpm}
+            onChange={(e) => setBpm(parseInt(e.target.value) || 0)}
+          />
+          <button
+            className="btn btn-outline-secondary btn-sm"
+            onClick={() => setBpm(currentTrack.bpm)}
+            title="Reset to track BPM"
+          >
+            <i className="bi bi-arrow-clockwise"></i>
+          </button>
+        </div>
       </div>
+
+ 
 
       {/* Status Message */}
       <div
@@ -75,7 +126,15 @@ function DJControls({ volume, onVolumeChange }) {
           mode === 'ON' ? 'alert-success' : 'alert-secondary'
         } mt-3 text-center fw-semibold py-2`}
       >
-        {mode === 'ON' ? ` Playing at ${bpm} BPM` : 'Hushed Mode'}
+        {mode === 'ON' ? (
+          <>
+            <i className="bi bi-play-fill me-1"></i>Playing at {bpm} BPM
+          </>
+        ) : (
+          <>
+            <i className="bi bi-pause-fill me-1"></i>Hushed Mode
+          </>
+        )}
       </div>
     </div>
   );

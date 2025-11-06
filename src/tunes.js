@@ -121,6 +121,8 @@ stack(
     .resonance(10)
     .gain(0.4)
 )
+// all(x => x.gain({$VOLUME}))
+// all(x => x.log())
 // @version 1.0`;
 
 export const ambient_dream = `setcps(90/60/4)
@@ -148,6 +150,9 @@ stack(
     .delayfb(0.6)
     .struct("x?0.3")
 )
+
+// all(x => x.gain({$VOLUME}))
+// all(x => x.log())
 // @version 1.0`;
 
 export const jazz_fusion = `setcps(120/60/4)
@@ -169,6 +174,9 @@ stack(
     .room(0.4)
     .gain(0.4)
 )
+
+// all(x => x.gain({$VOLUME}))
+// all(x => x.log())
 // @version 1.0`;
 
 export const drum_n_bass = `setcps(174/60/4)
@@ -187,6 +195,9 @@ stack(
     .gain(0.6)
     .struct("x ~ x x ~ x ~ x")
 )
+
+// all(x => x.gain({$VOLUME}))
+// all(x => x.log())
 // @version 1.0`;
 
 // Track definitions with metadata
