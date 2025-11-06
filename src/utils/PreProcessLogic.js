@@ -1,7 +1,8 @@
-export const preProcess = (inputText, volume) => {
+export const preProcess = (inputText, volume, bpm = 140) => {
   let outputText = inputText + '\n// hello, this is a test';
   outputText += `\n//all(x => x.gain(${volume}))`;
   outputText = outputText.replaceAll('{$VOLUME}', volume);
+  outputText = outputText.replaceAll('{$BPM}', bpm);
 
   // Original regex for named blocks (like bassline:, drums:, etc.)
   let regex = /[a-zA-Z0-9_.-]+:\s*\n[\s\S]+?\r?\n(?=[a-zA-Z0-9_]*[:/])/gm;

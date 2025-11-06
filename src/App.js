@@ -58,6 +58,7 @@ export default function StrudelDemo() {
   const [songText, setSongText] = useState(stranger_tune);
   const [procText, setProcText] = useState(stranger_tune);
   const [volume, setVolume] = useState(50); // Volume as percentage (0-100)
+  const [bpm, setBpm] = useState(140); // BPM control
   const [editorReady, setEditorReady] = useState(false);
   const [selectedTrack, setSelectedTrack] = useState('stranger'); // Default to stranger track
   const [musicElements, setMusicElements] = useState([]); // Store added music elements
@@ -70,6 +71,7 @@ export default function StrudelDemo() {
         setSelectedTrack(trackId);
         setSongText(track.code);
         setProcText(track.code);
+        setBpm(track.bpm); // Set BPM to track's default BPM
         setMusicElements([]); // Clear music elements when switching tracks
 
         // Update editor if ready
@@ -91,7 +93,7 @@ export default function StrudelDemo() {
       if (!globalEditor || !editorReady) return;
 
       const volumeDecimal = volume / 100;
-      let baseCode = preProcess(procText, volumeDecimal);
+      let baseCode = preProcess(procText, volumeDecimal, bpm);
 
       // If there are music elements, add them as additional named parts
       if (elements.length > 0) {
@@ -108,7 +110,7 @@ export default function StrudelDemo() {
       globalEditor.setCode(baseCode);
       globalEditor.evaluate();
     },
-    [musicElements, editorReady, volume, procText]
+    [musicElements, editorReady, volume, procText, bpm]
   );
 
   // Handle processing the text (preprocess function)
@@ -116,7 +118,7 @@ export default function StrudelDemo() {
     if (!globalEditor || !editorReady) return;
 
     const volumeDecimal = volume / 100;
-    let outputText = preProcess(procText, volumeDecimal);
+    let outputText = preProcess(procText, volumeDecimal, bpm);
 
     // Add music elements if any exist
     if (musicElements.length > 0) {
@@ -127,7 +129,7 @@ export default function StrudelDemo() {
     }
 
     globalEditor.setCode(outputText);
-  }, [editorReady, volume, procText, musicElements]);
+  }, [editorReady, volume, procText, musicElements, bpm]);
 
   // Handle process and play
   const handleProcessAndPlay = useCallback(() => {
@@ -156,13 +158,13 @@ export default function StrudelDemo() {
 
   useEffect(() => {
     if (state === 'play' && editorReady && globalEditor) {
-      // Only re-run when volume changes during playback
+      // Only re-run when volume or bpm changes during playback
       const volumeDecimal = volume / 100;
-      let outputText = preProcess(procText, volumeDecimal);
+      let outputText = preProcess(procText, volumeDecimal, bpm);
       globalEditor.setCode(outputText);
       globalEditor.evaluate();
     }
-  }, [volume, procText, state, editorReady]);
+  }, [volume, bpm, procText, state, editorReady]);
 
   // Keyboard shortcuts: Ctrl+Enter to Play, Ctrl+. to Stop
   useEffect(() => {
@@ -346,6 +348,7 @@ export default function StrudelDemo() {
                 handleStop={handleStop}
                 setState={setState}
                 editorReady={editorReady}
+                bpm={bpm}
               />
             </div>
 
@@ -363,6 +366,8 @@ export default function StrudelDemo() {
                       onVolumeChange={(e) => setVolume(e.target.value)}
                       selectedTrack={selectedTrack}
                       onTrackChange={handleTrackChange}
+                      bpm={bpm}
+                      onBpmChange={setBpm}
                     />
                   </div>
                 </div>

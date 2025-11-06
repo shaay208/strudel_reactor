@@ -1,4 +1,4 @@
-export const stranger_tune = `setcps(140/60/4)
+export const stranger_tune = `setcps({$BPM}/60/4)
 
 samples('github:algorave-dave/samples')
 samples('https://raw.githubusercontent.com/tidalcycles/Dirt-Samples/master/strudel.json')
@@ -104,7 +104,7 @@ all(x => x.gain({$VOLUME}))
 
 // @version 1.2`;
 
-export const techno_beat = `setcps(130/60/4)
+export const techno_beat = `setcps({$BPM}/60/4)
 
 samples('github:algorave-dave/samples')
 samples('https://raw.githubusercontent.com/tidalcycles/Dirt-Samples/master/strudel.json')
@@ -125,7 +125,7 @@ stack(
 // all(x => x.log())
 // @version 1.0`;
 
-export const ambient_dream = `setcps(90/60/4)
+export const ambient_dream = `setcps({$BPM}/60/4)
 
 samples('github:algorave-dave/samples')
 samples('https://raw.githubusercontent.com/tidalcycles/Dirt-Samples/master/strudel.json')
@@ -155,7 +155,7 @@ stack(
 // all(x => x.log())
 // @version 1.0`;
 
-export const jazz_fusion = `setcps(120/60/4)
+export const jazz_fusion = `setcps({$BPM}/60/4)
 
 samples('github:algorave-dave/samples')
 samples('https://raw.githubusercontent.com/tidalcycles/Dirt-Samples/master/strudel.json')
@@ -179,7 +179,7 @@ stack(
 // all(x => x.log())
 // @version 1.0`;
 
-export const drum_n_bass = `setcps(174/60/4)
+export const drum_n_bass = `setcps({$BPM}/60/4)
 
 samples('github:algorave-dave/samples')
 samples('https://raw.githubusercontent.com/tidalcycles/Dirt-Samples/master/strudel.json')

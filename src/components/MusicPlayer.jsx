@@ -11,6 +11,7 @@ const MusicPlayer = ({
   handleStop,
   setState,
   editorReady,
+  bpm
 }) => {
   return (
     <div
@@ -35,7 +36,7 @@ const MusicPlayer = ({
         <div className="flex-grow-1">
           <Graph />
         </div>
-        <TrackInfo selectedTrack={selectedTrack} />
+      <TrackInfo selectedTrack={selectedTrack} currentBpm={bpm} />
 
         {/* Controls */}
         <div className="d-flex align-items-center gap-2">

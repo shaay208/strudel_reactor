@@ -6,18 +6,28 @@ function DJControls({
   onVolumeChange,
   selectedTrack,
   onTrackChange,
+  bpm,
+  onBpmChange,
 }) {
-  const [bpm, setBpm] = useState(120);
+  const [localBpm, setLocalBpm] = useState(120);
   const [mode, setMode] = useState('ON');
-
 
   const currentTrack =
     tracks.find((track) => track.id === selectedTrack) || tracks[0];
 
-    useEffect(() => {
-      setBpm(currentTrack.bpm);
-    }, [currentTrack])
-    
+  useEffect(() => {
+    setLocalBpm(currentTrack.bpm);
+    if (onBpmChange) {
+      onBpmChange(currentTrack.bpm);
+    }
+  }, [currentTrack, onBpmChange]);
+
+  const handleBpmChange = (newBpm) => {
+    setLocalBpm(newBpm);
+    if (onBpmChange) {
+      onBpmChange(newBpm);
+    }
+  };
 
   return (
     <div>
@@ -39,7 +49,7 @@ function DJControls({
           ))}
         </select>
         <small className="text-muted">
-          Current: {currentTrack.name} • {currentTrack.bpm} BPM •{' '}
+          Current: {currentTrack.name} • {bpm || localBpm} BPM •{' '}
           {currentTrack.genre}
         </small>
       </div>
@@ -105,20 +115,18 @@ function DJControls({
             id="bpmInput"
             min="60"
             max="200"
-            value={bpm}
-            onChange={(e) => setBpm(parseInt(e.target.value) || 0)}
+            value={bpm || localBpm}
+            onChange={(e) => handleBpmChange(parseInt(e.target.value) || 0)}
           />
           <button
             className="btn btn-outline-secondary btn-sm"
-            onClick={() => setBpm(currentTrack.bpm)}
+            onClick={() => handleBpmChange(currentTrack.bpm)}
             title="Reset to track BPM"
           >
             <i className="bi bi-arrow-clockwise"></i>
           </button>
         </div>
       </div>
-
- 
 
       {/* Status Message */}
       <div
@@ -128,7 +136,8 @@ function DJControls({
       >
         {mode === 'ON' ? (
           <>
-            <i className="bi bi-play-fill me-1"></i>Playing at {bpm} BPM
+            <i className="bi bi-play-fill me-1"></i>Playing at {bpm || localBpm}{' '}
+            BPM
           </>
         ) : (
           <>

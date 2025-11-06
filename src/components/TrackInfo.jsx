@@ -1,10 +1,13 @@
 import React from 'react';
 import { getTrackById } from '../tunes';
 
-function TrackInfo({ selectedTrack }) {
+function TrackInfo({ selectedTrack, currentBpm  }) {
   const track = getTrackById(selectedTrack);
 
   if (!track) return null;
+
+  // Use currentBpm if provided, otherwise fall back to track's default BPM
+  const displayBpm = currentBpm || track.bpm;
 
   const getGenreIcon = (genre) => {
     switch (genre.toLowerCase()) {
@@ -45,10 +48,12 @@ function TrackInfo({ selectedTrack }) {
           <p className="text-muted mb-0">
             <span className="badge bg-secondary me-2">{track.genre}</span>
             <span
-              className={`badge ${getBpmColor(track.bpm)} bg-opacity-10 border`}
+              className={`badge ${getBpmColor(
+                displayBpm
+              )} bg-opacity-10 border`}
             >
               <i className="bi bi-speedometer2 me-1"></i>
-              {track.bpm} BPM
+              {displayBpm} BPM
             </span>
           </p>
         </div>
