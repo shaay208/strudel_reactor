@@ -1,8 +1,8 @@
 // MusicIconDance.jsx
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import 'animate.css'; // remove if you're using the CDN link in index.html
-import './MusicIconDance.css'; // custom styles below
+import 'animate.css';
+import './MusicIconDance.css';
 
 const MusicIconDance = ({ isPlaying, size = 40 }) => {
   // Choose a fun sequence of animate.css classes and custom class

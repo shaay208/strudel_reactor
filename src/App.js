@@ -257,7 +257,7 @@ export default function StrudelDemo() {
       globalEditor.setCode(songText);
       setEditorReady(true);
 
-      document.getElementById('proc').value = stranger_tune;
+      // document.getElementById('proc').value = stranger_tune;
       // SetupButtons();
       // Proc();
     }

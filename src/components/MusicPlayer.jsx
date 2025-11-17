@@ -30,7 +30,6 @@ const MusicPlayer = ({
 
       {/* Card Body */}
       <div className="card-body d-flex flex-column gap-3 p-3">
-        {/* Track Info */}
 
         {/* Graph */}
         <div className="flex-grow-1">
