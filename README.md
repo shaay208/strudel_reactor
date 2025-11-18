@@ -69,6 +69,10 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
+## Demonstration Video
+
+[Link to demonstration video](https://drive.google.com/drive/folders/1faCjdqfjxK3E1ccSpKW4vPPlYOIWw8io?usp=sharing) - 5-minute screen recording with facecam showing all features and controls in action.
+
 ## Features
 
 ### UI & Controls
