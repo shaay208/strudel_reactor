@@ -10,6 +10,8 @@ export default function DJControlsSection({
   onBpmChange,
   p1Mode,
   onP1ModeChange,
+  onSavePreset,
+  onLoadPreset,
 }) {
   return (
     <div className="col-lg-3">
@@ -28,6 +30,8 @@ export default function DJControlsSection({
               onBpmChange={onBpmChange}
               p1Mode={p1Mode}
               onP1ModeChange={onP1ModeChange}
+              onSavePreset={onSavePreset}
+              onLoadPreset={onLoadPreset}
             />
           </div>
         </div>

@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# Strudel Reactor
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React-based music application using Strudel for live coding music. This app allows users to create, preprocess, and play music tracks with various controls and visualizations.
 
 ## Available Scripts
 
@@ -69,10 +69,52 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
+## Features
+
+### UI & Controls
+
+The application features a cohesive Bootstrap-styled interface with the following controls:
+
+- **Track Selection**: Dropdown menu to select from available music tracks (e.g., Stranger, etc.).
+- **Volume Control**: Slider (0-100%) to adjust playback volume.
+- **BPM Control**: Number input field to set beats per minute, with a reset button to default track BPM.
+- **Mode Selection**: Radio buttons to toggle between "P1: ON" (playing) and "P1: HUSH" (muted) modes.
+- **Playback Controls**:
+  - Play/Stop buttons for starting and stopping music.
+  - Preprocess button to process the text input.
+  - Process & Play button to preprocess and immediately start playback.
+- **Music Adder**: Quick add buttons for various music elements (Kick, Hi-Hat, Snare, Bass, Synth, Pad, FX, Cymbal, Clap, Jazz). Added elements are displayed as removable badges.
+- **Code Editor**: Accordion with textarea for editing Strudel code and a live editor view.
+- **Presets**: Save and Load buttons to store/load current settings (volume, BPM, track, added elements, mode) using localStorage.
+- **Keyboard Shortcuts**: Ctrl+Enter to play, Ctrl+. to stop.
+- **Visualizations**: Real-time D3 graph showing music event data, ball animation during playback, and pianoroll canvas.
+
+### Preprocessing Logic
+
+- Single parent component (App.js) manages all state and data flow.
+- Preprocessing logic in `PreProcessLogic.js` handles volume scaling, BPM adjustment, and integration of added music elements into the Strudel code.
+- Code is organized into modular components with descriptive names and comments.
+- Error handling for invalid inputs and graceful fallbacks.
+
+### Additional Features
+
+- **JSON Handling**: Save/load presets as JSON objects stored in localStorage for persisting user settings.
+- **D3 Graph**: Real-time updating line graph visualizing music events (notes, gains, etc.) extracted from Strudel logs. Graph clears every 100 events and shows up to 20 data points.
+
+## Usage Guidelines
+
+- Start by selecting a track from the dropdown.
+- Adjust volume and BPM as needed.
+- Use the code editor to modify the Strudel code.
+- Add music elements using the quick add buttons; they will blend into the current track.
+- Save presets to remember your settings.
+- The D3 graph updates in real-time during playback.
+
+## AI Usage
 
 <!-- /issue with not adding new music to the on playing music issue debug by using AI and then explaining the code and learning the solution  -->
 
-**Debug steps**: 
+**Debug steps**:
 `check the difference between the working 1st track where it works with adding music to the playing track and other tracks did not adding music to the track instead it play only the newly added music elements. so debug with it by checking the differences by checking the playing code diff in diffcheker like in the (/Users/shalinialgama/Documents/webtec/strudel_reactor/public/diffchker of debug.png) then identified that the adding elements are change in the tunes and then feeding the recent preProcessLogic`
 
 **Inserted input to AI**: existing preProcessLogic.js file logic and 'added elements only playing when added to the music but it should play both track and added elements combined'
@@ -85,9 +127,9 @@ This happens because your second code never finds stack() and never injects into
 
 // Add music elements if any exist and apply volume to them
 if (musicElements.length > 0) {
-  const elementCodes = musicElements.map((element) => {
-    // Remove leading "name:"
-    let code = element.code.replace(/^[\s\r\n]*[A-Za-z0-9_.-]+\s*:\s*/, '');
+const elementCodes = musicElements.map((element) => {
+// Remove leading "name:"
+let code = element.code.replace(/^[\s\r\n]_[A-Za-z0-9_.-]+\s_:\s\*/, '');
 
     // Apply volume scaling
     code = code.replaceAll(
@@ -96,12 +138,13 @@ if (musicElements.length > 0) {
     );
 
     return code.trim();
-  });
 
-  const idx = matches3.indexOf('stack(');
-  if (idx !== -1) {
-    const openPos = matches3.indexOf('(', idx);
-    let depth = 0;
+});
+
+const idx = matches3.indexOf('stack(');
+if (idx !== -1) {
+const openPos = matches3.indexOf('(', idx);
+let depth = 0;
 
     for (let i = openPos; i < matches3.length; i++) {
       const ch = matches3[i];
@@ -128,11 +171,12 @@ if (musicElements.length > 0) {
         }
       }
     }
-  } else {
-    // No stack() found → fallback append (won’t override main)
-    matches3 +=
-      '\n\n// === Added Elements ===\n' + elementCodes.join('\n\n') + '\n';
-  }
+
+} else {
+// No stack() found → fallback append (won’t override main)
+matches3 +=
+'\n\n// === Added Elements ===\n' + elementCodes.join('\n\n') + '\n';
+}
 }
 
 Before fix:
@@ -140,7 +184,7 @@ Before fix:
 Your code was doing:
 
 stack(...)
- 
+
 // === Added Elements ===
 s("new stuff")
 
@@ -149,17 +193,17 @@ After fix:
 
 Now it produces:
 stack(
-  s("bd*4"),
-  s("sn*2"),
-  s("added element"),   <-- injected here 👍
+s("bd*4"),
+s("sn*2"),
+s("added element"), <-- injected here 👍
 )
 So everything plays together, just like your first working version.`
 
-**Inserted input to AI**: 
+**Inserted input to AI**:
 "if (musicElements.length > 0) {
-    const elementCodes = musicElements.map((element) => {
-      // Remove leading "name:"
-      let code = element.code.replace(/^[\s\r\n]*[A-Za-z0-9_.-]+\s*:\s*/, '');
+const elementCodes = musicElements.map((element) => {
+// Remove leading "name:"
+let code = element.code.replace(/^[\s\r\n]_[A-Za-z0-9_.-]+\s_:\s\*/, '');
 
       // Apply volume scaling
       code = code.replaceAll(
@@ -205,11 +249,12 @@ So everything plays together, just like your first working version.`
       matches3 +=
         '\n\n// === Added Elements ===\n' + elementCodes.join('\n\n') + '\n';
     }
-  }
- explain the code "
 
- **AI output**: 
- "This code block is part of a function that processes and modifies a string (matches3) based on the presence of musicElements. Here's a detailed explanation:
+}
+explain the code "
+
+**AI output**:
+"This code block is part of a function that processes and modifies a string (matches3) based on the presence of musicElements. Here's a detailed explanation:
 
 Purpose
 The code dynamically injects or appends new music-related elements (musicElements) into a string (matches3) that represents some kind of structured data, such as a configuration or script. It ensures that the new elements are properly formatted and integrated into the existing structure.
@@ -224,12 +269,12 @@ if (musicElements.length > 0) {
 Transform musicElements into formatted codes:
 
 const elementCodes = musicElements.map((element) => {
-  let code = element.code.replace(/^[\s\r\n]*[A-Za-z0-9_.-]+\s*:\s*/, '');
-  code = code.replaceAll(
-    /(?<!post)gain\(([\d.]+)\)/g,
-    (match, g) => `gain(${g} * ${volume})`
-  );
-  return code.trim();
+let code = element.code.replace(/^[\s\r\n]_[A-Za-z0-9_.-]+\s_:\s*/, '');
+code = code.replaceAll(
+/(?<!post)gain\(([\d.]+)\)/g,
+(match, g) => `gain(${g} * ${volume})`
+);
+return code.trim();
 });
 
 Each element in musicElements is processed:
@@ -246,18 +291,18 @@ The code looks for the first stack( in the matches3 string. This is likely a fun
 If stack( is found:
 
 if (idx !== -1) {
-  const openPos = matches3.indexOf('(', idx);
-  let depth = 0;
+const openPos = matches3.indexOf('(', idx);
+let depth = 0;
 
-  for (let i = openPos; i < matches3.length; i++) {
-    const ch = matches3[i];
-    if (ch === '(') depth++;
-    else if (ch === ')') {
-      depth--;
-      if (depth === 0) {
-        // Insert right before the closing ")"
-        const before = matches3.slice(0, i);
-        const after = matches3.slice(i);
+for (let i = openPos; i < matches3.length; i++) {
+const ch = matches3[i];
+if (ch === '(') depth++;
+else if (ch === ')') {
+depth--;
+if (depth === 0) {
+// Insert right before the closing ")"
+const before = matches3.slice(0, i);
+const after = matches3.slice(i);
 
         const needsComma = /[^,\s]$/.test(before.trim());
 
@@ -272,7 +317,8 @@ if (idx !== -1) {
         break;
       }
     }
-  }
+
+}
 }
 
 Locate the opening parenthesis: The position of the first ( after stack( is stored in openPos.
@@ -285,8 +331,8 @@ The elementCodes are joined with commas and newlines, then inserted before the c
 If stack( is not found:
 
 else {
-  matches3 +=
-    '\n\n// === Added Elements ===\n' + elementCodes.join('\n\n') + '\n';
+matches3 +=
+'\n\n// === Added Elements ===\n' + elementCodes.join('\n\n') + '\n';
 }
 
 If no stack( is found, the elementCodes are appended to the end of matches3 with a comment // === Added Elements === to indicate the addition.
@@ -306,4 +352,5 @@ This code is likely part of a music or audio processing tool where matches3 repr
 "
 
 #### Ball animation
+
 Do search to create an animation and found an medium article(https://medium.com/@josesoal/a-canvas-animation-with-react-7a81aa331609) that have ball animation and learned from it and used it on the assignment to show the user an animation when user playing and when sound track stop then user is seeing boostrap loading animation.

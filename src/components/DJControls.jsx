@@ -10,6 +10,8 @@ const DJControls = ({
   onBpmChange,
   p1Mode,
   onP1ModeChange,
+  onSavePreset,
+  onLoadPreset,
 }) => {
   const [localBpm, setLocalBpm] = useState(120);
 
@@ -146,8 +148,23 @@ const DJControls = ({
           </>
         )}
       </div>
+
+      {/* Preset Save/Load */}
+      <div className="mt-3">
+        <label className="form-label fw-semibold">
+          <i className="bi bi-floppy me-2"></i>Presets
+        </label>
+        <div className="d-flex gap-2">
+          <button className="btn btn-success flex-fill" onClick={onSavePreset}>
+            <i className="bi bi-save me-1"></i>Save
+          </button>
+          <button className="btn btn-info flex-fill" onClick={onLoadPreset}>
+            <i className="bi bi-upload me-1"></i>Load
+          </button>
+        </div>
+      </div>
     </div>
   );
-}
+};
 
 export default DJControls;

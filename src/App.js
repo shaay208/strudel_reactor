@@ -21,7 +21,6 @@ import MusicAdderSection from './components/MusicAdderSection';
 import DJControlsSection from './components/DJControlsSection';
 import { preProcess } from './utils/PreProcessLogic';
 
-
 let globalEditor = null;
 
 // REMOVED: Original handleD3Data function caused infinite loops
@@ -103,6 +102,41 @@ export default function StrudelDemo() {
   const handleClearAllMusic = useCallback(() => {
     setMusicElements([]);
   }, []);
+
+  // Save and Load Preset handlers
+  const handleSavePreset = useCallback(() => {
+    const preset = {
+      volume,
+      bpm,
+      selectedTrack,
+      musicElements,
+      p1Mode,
+    };
+    localStorage.setItem('strudel_preset', JSON.stringify(preset));
+    alert('Preset saved successfully!');
+  }, [volume, bpm, selectedTrack, musicElements, p1Mode]);
+
+  const handleLoadPreset = useCallback(() => {
+    const presetStr = localStorage.getItem('strudel_preset');
+    if (presetStr) {
+      try {
+        const preset = JSON.parse(presetStr);
+        setVolume(preset.volume || 50);
+        setBpm(preset.bpm || 140);
+        setSelectedTrack(preset.selectedTrack || 'stranger');
+        setMusicElements(preset.musicElements || []);
+        setP1Mode(preset.p1Mode || 'on');
+        // Update track
+        handleTrackChange(preset.selectedTrack || 'stranger');
+        alert('Preset loaded successfully!');
+      } catch (e) {
+        console.error('Failed to load preset', e);
+        alert('Failed to load preset. Invalid data.');
+      }
+    } else {
+      alert('No preset found.');
+    }
+  }, [handleTrackChange]);
 
   const updatePlayingTrack = useCallback(
     (elements = musicElements) => {
@@ -297,6 +331,8 @@ export default function StrudelDemo() {
               onBpmChange={setBpm}
               p1Mode={p1Mode}
               onP1ModeChange={setP1Mode}
+              onSavePreset={handleSavePreset}
+              onLoadPreset={handleLoadPreset}
             />
           </div>
         </main>
