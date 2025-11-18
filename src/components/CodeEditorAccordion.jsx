@@ -1,10 +1,10 @@
 import PreprocessTextarea from './PreprocessTextarea';
 
-export default function CodeEditorAccordion({
+const CodeEditorAccordion = ({
   songText,
   setSongText,
   setProcText,
-}) {
+}) => {
   return (
     <div className="accordion mb-4" id="codeAccordion">
       <div className="accordion-item">
@@ -82,3 +82,5 @@ export default function CodeEditorAccordion({
     </div>
   );
 }
+
+export default CodeEditorAccordion;

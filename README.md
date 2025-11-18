@@ -305,3 +305,5 @@ Use Case
 This code is likely part of a music or audio processing tool where matches3 represents a script or configuration. The musicElements array contains additional elements to be integrated into the script, and the code ensures they are added in the correct format and location.
 "
 
+#### Ball animation
+Do search to create an animation and found an medium article(https://medium.com/@josesoal/a-canvas-animation-with-react-7a81aa331609) that have ball animation and learned from it and used it on the assignment to show the user an animation when user playing and when sound track stop then user is seeing boostrap loading animation.

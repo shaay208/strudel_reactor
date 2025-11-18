@@ -1,6 +1,6 @@
 import MusicPlayer from './MusicPlayer';
 
-export default function MusicPlayerSection({
+const MusicPlayerSection = ({
   state,
   selectedTrack,
   handleProcess,
@@ -10,7 +10,7 @@ export default function MusicPlayerSection({
   setState,
   editorReady,
   bpm,
-}) {
+}) =>{
   return (
     <div className="col-lg-6">
       <MusicPlayer
@@ -27,3 +27,4 @@ export default function MusicPlayerSection({
     </div>
   );
 }
+export default MusicPlayerSection;

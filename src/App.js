@@ -21,6 +21,7 @@ import MusicAdderSection from './components/MusicAdderSection';
 import DJControlsSection from './components/DJControlsSection';
 import { preProcess } from './utils/PreProcessLogic';
 
+
 let globalEditor = null;
 
 // REMOVED: Original handleD3Data function caused infinite loops

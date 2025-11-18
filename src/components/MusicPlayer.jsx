@@ -1,6 +1,7 @@
 import React from 'react';
 import Graph from './Graph';
 import TrackInfo from './TrackInfo';
+import BallAnimation from './BallAnimation';
 
 const MusicPlayer = ({
   state,
@@ -11,7 +12,7 @@ const MusicPlayer = ({
   handleStop,
   setState,
   editorReady,
-  bpm
+  bpm,
 }) => {
   return (
     <div
@@ -30,12 +31,26 @@ const MusicPlayer = ({
 
       {/* Card Body */}
       <div className="card-body d-flex flex-column gap-3 p-3">
-
         {/* Graph */}
         <div className="flex-grow-1">
           <Graph />
         </div>
-      <TrackInfo selectedTrack={selectedTrack} currentBpm={bpm} />
+
+        {/* Track Info */}
+        <TrackInfo selectedTrack={selectedTrack} currentBpm={bpm} />
+
+        {/* Ball Animation (below Track Info) */}
+        {state === 'play' ? (
+          <div style={{ width: '100%', height: '250px', overflow: 'hidden' }}>
+            <BallAnimation />
+          </div>
+        ) : (
+          <div className="d-flex justify-content-center">
+            <div className="spinner-grow text-secondary" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          </div>
+        )}
 
         {/* Controls */}
         <div className="d-flex align-items-center gap-2">
