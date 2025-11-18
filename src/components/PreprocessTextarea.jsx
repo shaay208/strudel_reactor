@@ -1,6 +1,6 @@
 import React from 'react';
 
-const PreprocessTextarea = ({ value, onChange }) => {
+const PreprocessTextarea = ({ songText, onChange }) => {
   return (
     <>
       <textarea
@@ -11,7 +11,7 @@ const PreprocessTextarea = ({ value, onChange }) => {
           fontFamily: 'Consolas, Monaco, "Courier New", monospace',
         }}
         id="proc"
-        value={value}
+        value={songText}
         onChange={onChange}
         placeholder="Enter your Strudel code here..."
       />

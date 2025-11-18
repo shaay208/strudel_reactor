@@ -301,7 +301,7 @@ export default function StrudelDemo() {
                         </div>
                         <div className="card-body p-2">
                           <PreprocessTextarea
-                            value={songText}
+                            songText={songText}
                             onChange={(e) => {
                               setSongText(e.target.value);
                               setProcText(e.target.value);
