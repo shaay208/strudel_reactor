@@ -15,11 +15,10 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import { stranger_tune, tracks, getTrackById } from './tunes';
 import console_monkey_patch from './console-monkey-patch';
 import Header from './components/Header';
-import DJControls from './components/DJControls';
-import PreprocessTextarea from './components/PreprocessTextarea';
-import KeyboardShortcuts from './components/KeyboardShortcuts';
-import MusicPlayer from './components/MusicPlayer';
-import QuickMusicAdder from './components/QuickMusicAdder';
+import CodeEditorAccordion from './components/CodeEditorAccordion';
+import MusicPlayerSection from './components/MusicPlayerSection';
+import MusicAdderSection from './components/MusicAdderSection';
+import DJControlsSection from './components/DJControlsSection';
 import { preProcess } from './utils/PreProcessLogic';
 
 let globalEditor = null;
@@ -263,94 +262,15 @@ export default function StrudelDemo() {
   return (
     <div className="bg-light min-vh-100 py-4">
       <Header />
+      <div className="container py-4">
         <main className="main-panel">
-          {/* Code Editing Accordion Only */}
-          <div className="accordion mb-4" id="codeAccordion">
-            <div className="accordion-item">
-              <h2 className="accordion-header" id="codeHeading">
-                <button
-                  className="accordion-button"
-                  type="button"
-                  data-bs-toggle="collapse"
-                  data-bs-target="#codeCollapse"
-                  aria-expanded="true"
-                  aria-controls="codeCollapse"
-                >
-                  <i className="bi bi-code-square me-2"></i>
-                  <strong>Code Editor & Text Preprocessing</strong>
-                </button>
-              </h2>
-              <div
-                id="codeCollapse"
-                className="accordion-collapse collapse show"
-                aria-labelledby="codeHeading"
-                data-bs-parent="#codeAccordion"
-              >
-                <div className="accordion-body">
-                  <div className="row g-3">
-                    <div className="col-md-6">
-                      <div
-                        className="card glass-card"
-                        style={{ height: '400px' }}
-                      >
-                        <div className="card-header gradient-header">
-                          <h6 className="text-primary fw-bold mb-0">
-                            <i className="bi bi-file-text me-2"></i>Text to
-                            preprocess:
-                          </h6>
-                        </div>
-                        <div className="card-body p-2">
-                          <PreprocessTextarea
+          <CodeEditorAccordion
             songText={songText}
-                            onChange={(e) => {
-                              setSongText(e.target.value);
-                              setProcText(e.target.value);
-                            }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="col-md-6">
-                      <div
-                        className="card glass-card"
-                        style={{ height: '400px' }}
-                      >
-                        <div className="card-header text-primary fw-bold gradient-header">
-                          <h6 className="mb-0">
-                            <i className="bi bi-terminal me-2"></i>Editor
-                          </h6>
-                        </div>
-                        <div
-                          className="card-body p-2"
-                          style={{
-                            height: '350px',
-                            overflow: 'auto',
-                            backgroundColor: '#1e1e1e',
-                            border: 'none',
-                          }}
-                        >
-                          <div
-                            id="editor"
-                            style={{
-                              height: '100%',
-                              backgroundColor: '#1e1e1e',
-                              minHeight: '100%',
-                            }}
+            setSongText={setSongText}
+            setProcText={setProcText}
           />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Regular Layout for Other Components */}
           <div className="row g-3 mb-4">
-            {/* Left Column - Music Player Component */}
-            <div className="col-lg-6">
-              <MusicPlayer
+            <MusicPlayerSection
               state={state}
               selectedTrack={selectedTrack}
               handleProcess={handleProcess}
@@ -361,28 +281,13 @@ export default function StrudelDemo() {
               editorReady={editorReady}
               bpm={bpm}
             />
-            </div>
-
-            {/* Middle Column - Music Adder */}
-            <div className="col-lg-3">
-              <QuickMusicAdder
+            <MusicAdderSection
               musicElements={musicElements}
               onAddMusic={handleAddMusic}
               onRemoveMusic={handleRemoveMusic}
               onClearAll={handleClearAllMusic}
             />
-            </div>
-
-            {/* Right Column - DJ Controls */}
-            <div className="col-lg-3">
-              <div className="d-flex flex-column gap-3 h-100">
-                {/* DJ Controls */}
-                <div className="card glass-card">
-                  <div className="card-header text-primary fw-bold gradient-header">
-                    <i className="bi bi-mixer2 me-2"></i>DJ Controls
-                  </div>
-                  <div className="card-body">
-                    <DJControls
+            <DJControlsSection
               volume={volume}
               onVolumeChange={(e) => setVolume(e.target.value)}
               selectedTrack={selectedTrack}
@@ -392,21 +297,9 @@ export default function StrudelDemo() {
               p1Mode={p1Mode}
               onP1ModeChange={setP1Mode}
             />
-                  </div>
-                </div>
-
-                {/* Keyboard Shortcuts */}
-                <KeyboardShortcuts />
-
-                <canvas
-                  id="roll"
-                  className="w-100 rounded canvas-glow display-none"
-                  style={{ height: '200px' }}
-                />
-              </div>
-            </div>
           </div>
         </main>
+      </div>
     </div>
   );
 }
