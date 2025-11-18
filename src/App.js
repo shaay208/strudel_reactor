@@ -256,10 +256,6 @@ export default function StrudelDemo() {
       // Set initial code and mark editor as ready
       globalEditor.setCode(songText);
       setEditorReady(true);
-
-      // document.getElementById('proc').value = stranger_tune;
-      // SetupButtons();
-      // Proc();
     }
   }, [songText]);
 
@@ -305,7 +301,7 @@ export default function StrudelDemo() {
                         </div>
                         <div className="card-body p-2">
                           <PreprocessTextarea
-                            defaultValue={songText}
+                            value={songText}
                             onChange={(e) => {
                               setSongText(e.target.value);
                               setProcText(e.target.value);
