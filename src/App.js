@@ -14,6 +14,7 @@ import { registerSoundfonts } from '@strudel/soundfonts';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { stranger_tune, tracks, getTrackById } from './tunes';
 import console_monkey_patch from './console-monkey-patch';
+import Header from './components/Header';
 import DJControls from './components/DJControls';
 import PreprocessTextarea from './components/PreprocessTextarea';
 import KeyboardShortcuts from './components/KeyboardShortcuts';
@@ -261,8 +262,7 @@ export default function StrudelDemo() {
 
   return (
     <div className="bg-light min-vh-100 py-4">
-      <div className="container py-4">
-        <h2 className="text-center mb-4 text-primary fw-bold">Strudel Demo</h2>
+      <Header />
         <main className="main-panel">
           {/* Code Editing Accordion Only */}
           <div className="accordion mb-4" id="codeAccordion">
@@ -301,7 +301,7 @@ export default function StrudelDemo() {
                         </div>
                         <div className="card-body p-2">
                           <PreprocessTextarea
-                            songText={songText}
+            songText={songText}
                             onChange={(e) => {
                               setSongText(e.target.value);
                               setProcText(e.target.value);
@@ -336,7 +336,7 @@ export default function StrudelDemo() {
                               backgroundColor: '#1e1e1e',
                               minHeight: '100%',
                             }}
-                          />
+          />
                         </div>
                       </div>
                     </div>
@@ -351,26 +351,26 @@ export default function StrudelDemo() {
             {/* Left Column - Music Player Component */}
             <div className="col-lg-6">
               <MusicPlayer
-                state={state}
-                selectedTrack={selectedTrack}
-                handleProcess={handleProcess}
-                handleProcessAndPlay={handleProcessAndPlay}
-                handlePlay={handlePlay}
-                handleStop={handleStop}
-                setState={setState}
-                editorReady={editorReady}
-                bpm={bpm}
-              />
+              state={state}
+              selectedTrack={selectedTrack}
+              handleProcess={handleProcess}
+              handleProcessAndPlay={handleProcessAndPlay}
+              handlePlay={handlePlay}
+              handleStop={handleStop}
+              setState={setState}
+              editorReady={editorReady}
+              bpm={bpm}
+            />
             </div>
 
             {/* Middle Column - Music Adder */}
             <div className="col-lg-3">
               <QuickMusicAdder
-                musicElements={musicElements}
-                onAddMusic={handleAddMusic}
-                onRemoveMusic={handleRemoveMusic}
-                onClearAll={handleClearAllMusic}
-              />
+              musicElements={musicElements}
+              onAddMusic={handleAddMusic}
+              onRemoveMusic={handleRemoveMusic}
+              onClearAll={handleClearAllMusic}
+            />
             </div>
 
             {/* Right Column - DJ Controls */}
@@ -383,15 +383,15 @@ export default function StrudelDemo() {
                   </div>
                   <div className="card-body">
                     <DJControls
-                      volume={volume}
-                      onVolumeChange={(e) => setVolume(e.target.value)}
-                      selectedTrack={selectedTrack}
-                      onTrackChange={handleTrackChange}
-                      bpm={bpm}
-                      onBpmChange={setBpm}
-                      p1Mode={p1Mode}
-                      onP1ModeChange={setP1Mode}
-                    />
+              volume={volume}
+              onVolumeChange={(e) => setVolume(e.target.value)}
+              selectedTrack={selectedTrack}
+              onTrackChange={handleTrackChange}
+              bpm={bpm}
+              onBpmChange={setBpm}
+              p1Mode={p1Mode}
+              onP1ModeChange={setP1Mode}
+            />
                   </div>
                 </div>
 
@@ -407,7 +407,6 @@ export default function StrudelDemo() {
             </div>
           </div>
         </main>
-      </div>
     </div>
   );
 }
