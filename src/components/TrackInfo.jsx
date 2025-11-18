@@ -3,7 +3,7 @@ import { getTrackById } from '../tunes';
 
 //  TrackInfo Component displays detailed information about the selected track,
 //  including name, genre, BPM, and visual indicators.
-const TrackInfo = ({ selectedTrack, currentBpm  }) => {
+const TrackInfo = ({ selectedTrack, currentBpm }) => {
   const track = getTrackById(selectedTrack);
 
   if (!track) return null;
@@ -99,6 +99,6 @@ const TrackInfo = ({ selectedTrack, currentBpm  }) => {
       </div>
     </div>
   );
-}
+};
 
 export default TrackInfo;

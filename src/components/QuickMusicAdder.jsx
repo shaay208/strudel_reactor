@@ -60,7 +60,7 @@ const QuickMusicAdder = ({
       type: 'drums',
     },
     {
-        name: 'Clap',
+      name: 'Clap',
       code: 's("clap").gain(0.5)',
       icon: 'bi bi-hand-index-thumb',
       type: 'drums',

@@ -14,7 +14,7 @@ const createBall = (ctx, x, y, speedX, speedY, color, size) => {
     color,
     size,
 
-  // Method to draw the ball on the canvas
+    // Method to draw the ball on the canvas
     draw() {
       this.ctx.beginPath();
       this.ctx.fillStyle = this.color;
@@ -36,7 +36,7 @@ const createBall = (ctx, x, y, speedX, speedY, color, size) => {
 
     // Method to detect collisions with other balls and change color on collision
     collisionDetect(balls) {
-      balls.forEach(other => {
+      balls.forEach((other) => {
         if (other !== this) {
           const dx = this.x - other.x;
           const dy = this.y - other.y;
@@ -52,9 +52,9 @@ const createBall = (ctx, x, y, speedX, speedY, color, size) => {
           }
         }
       });
-    }
+    },
   };
-// Return the ball object
+  // Return the ball object
   return ball;
 };
 

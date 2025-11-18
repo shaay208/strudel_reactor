@@ -39,20 +39,20 @@ export default function StrudelDemo() {
 
   // Extract music info from hap for logging
   const getMusicInfo = (hap) => {
-  const value = hap.value || {};
+    const value = hap.value || {};
 
-  if (!value || typeof value !== 'object') return '';
+    if (!value || typeof value !== 'object') return '';
 
-  const parts = [];
+    const parts = [];
 
-  if (value.note !== undefined) parts.push(`note:${value.note}`);
-  if (value.n !== undefined) parts.push(`n:${value.n}`);
-  if (value.s !== undefined) parts.push(`s:${value.s}`);
-  if (value.gain !== undefined) parts.push(`gain:${value.gain}`);
-  if (value.postgain !== undefined) parts.push(`postgain:${value.postgain}`);
+    if (value.note !== undefined) parts.push(`note:${value.note}`);
+    if (value.n !== undefined) parts.push(`n:${value.n}`);
+    if (value.s !== undefined) parts.push(`s:${value.s}`);
+    if (value.gain !== undefined) parts.push(`gain:${value.gain}`);
+    if (value.postgain !== undefined) parts.push(`postgain:${value.postgain}`);
 
-  return parts.length > 0 ? parts.join(' ') : '';
-}
+    return parts.length > 0 ? parts.join(' ') : '';
+  };
 
   const handleTrackChange = useCallback(
     (trackId) => {
@@ -105,7 +105,6 @@ export default function StrudelDemo() {
     localStorage.setItem('strudel_preset', JSON.stringify(preset));
     alert('Preset saved successfully!');
   }, [volume, bpm, selectedTrack, musicElements, p1Mode]);
-
 
   // Load preset from localStorage
   const handleLoadPreset = useCallback(() => {
@@ -177,7 +176,7 @@ export default function StrudelDemo() {
     }
     updatePlayingTrack();
   }, [updatePlayingTrack]);
- 
+
   // Stop playback
   const handleStop = useCallback(() => {
     if (!globalEditor) {

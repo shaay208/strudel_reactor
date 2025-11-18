@@ -48,7 +48,7 @@ const BallAnimation = () => {
     }
 
     // Update all balls
-    balls.forEach(ball => {
+    balls.forEach((ball) => {
       ball.draw();
       ball.update(width, height);
       ball.collisionDetect(balls);
@@ -77,7 +77,7 @@ const BallAnimation = () => {
         width: '100%',
         height: '100%',
         display: 'block',
-        borderRadius: '10px'
+        borderRadius: '10px',
       }}
     />
   );

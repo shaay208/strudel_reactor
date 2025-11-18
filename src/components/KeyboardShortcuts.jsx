@@ -26,6 +26,6 @@ const KeyboardShortcuts = () => {
       </div>
     </div>
   );
-}
+};
 
 export default KeyboardShortcuts;

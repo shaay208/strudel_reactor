@@ -1,4 +1,3 @@
-
 import QuickMusicAdder from './QuickMusicAdder';
 
 //  MusicAdderSection Component that provides the layout for the music adder section,
