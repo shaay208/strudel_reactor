@@ -1,5 +1,7 @@
 import React from 'react';
 
+//  PreprocessTextarea Component that renders a textarea for inputting Strudel code,
+//  with specific styling and change handling.
 const PreprocessTextarea = ({ songText, onChange }) => {
   return (
     <>

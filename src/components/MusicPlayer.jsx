@@ -3,6 +3,8 @@ import Graph from './Graph';
 import TrackInfo from './TrackInfo';
 import BallAnimation from './BallAnimation';
 
+//  MusicPlayer Component that provides the UI for music playback controls,
+//  including play/stop buttons, preprocess options, and displays track info.
 const MusicPlayer = ({
   state,
   selectedTrack,

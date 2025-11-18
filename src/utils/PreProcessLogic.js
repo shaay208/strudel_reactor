@@ -1,3 +1,4 @@
+// PreProcessLogic.js - handles preprocessing of input text for music generation
 export const preProcess = (
   inputText,
   volume,

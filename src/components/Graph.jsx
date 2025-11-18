@@ -3,6 +3,9 @@ import * as d3 from 'd3';
 // Import subscribe/unsubscribe to listen for music events
 import { subscribe, unsubscribe } from '../console-monkey-patch';
 
+//  Graph Component visualizes incoming Strudel music events using D3.
+//  It subscribes to music event updates (via console-monkey-patch) and
+//  converts those strings into numeric values for display.
 const Graph = () => {
   const [rngNumber, setRngNumber] = useState(0);
   const [rngArray, setRngArray] = useState([]);

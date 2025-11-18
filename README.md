@@ -110,6 +110,11 @@ The application features a cohesive Bootstrap-styled interface with the followin
 - Save presets to remember your settings.
 - The D3 graph updates in real-time during playback.
 
+## Songs and Attribution
+
+- Default tracks are original and adapted from Strudel.cc bakery examples (https://strudel.cc/learn/effects/)
+- No external songs used; all code is custom and from Strudel library.
+
 ## AI Usage
 
 <!-- /issue with not adding new music to the on playing music issue debug by using AI and then explaining the code and learning the solution  -->
@@ -129,7 +134,7 @@ This happens because your second code never finds stack() and never injects into
 if (musicElements.length > 0) {
 const elementCodes = musicElements.map((element) => {
 // Remove leading "name:"
-let code = element.code.replace(/^[\s\r\n]_[A-Za-z0-9_.-]+\s_:\s\*/, '');
+let code = element.code.replace(/^[\s\r\n]_[A-Za-z0-9_.-]+\s\_:\s\*/, '');
 
     // Apply volume scaling
     code = code.replaceAll(
@@ -203,7 +208,7 @@ So everything plays together, just like your first working version.`
 "if (musicElements.length > 0) {
 const elementCodes = musicElements.map((element) => {
 // Remove leading "name:"
-let code = element.code.replace(/^[\s\r\n]_[A-Za-z0-9_.-]+\s_:\s\*/, '');
+let code = element.code.replace(/^[\s\r\n]_[A-Za-z0-9_.-]+\s\_:\s\*/, '');
 
       // Apply volume scaling
       code = code.replaceAll(
@@ -269,7 +274,7 @@ if (musicElements.length > 0) {
 Transform musicElements into formatted codes:
 
 const elementCodes = musicElements.map((element) => {
-let code = element.code.replace(/^[\s\r\n]_[A-Za-z0-9_.-]+\s_:\s*/, '');
+let code = element.code.replace(/^[\s\r\n]_[A-Za-z0-9_.-]+\s\_:\s*/, '');
 code = code.replaceAll(
 /(?<!post)gain\(([\d.]+)\)/g,
 (match, g) => `gain(${g} * ${volume})`

@@ -1,7 +1,10 @@
-// components/Ball.js
+// CreateBall function
+// Utility function to create a ball object with properties and methods for drawing,
+// updating position, and detecting collisions on a canvas.
 const createBall = (ctx, x, y, speedX, speedY, color, size) => {
   const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
 
+  // Define the ball object
   let ball = {
     ctx,
     x,
@@ -11,6 +14,7 @@ const createBall = (ctx, x, y, speedX, speedY, color, size) => {
     color,
     size,
 
+  // Method to draw the ball on the canvas
     draw() {
       this.ctx.beginPath();
       this.ctx.fillStyle = this.color;
@@ -18,6 +22,7 @@ const createBall = (ctx, x, y, speedX, speedY, color, size) => {
       this.ctx.fill();
     },
 
+    // Method to update the ball's position and handle wall collisions
     update(width, height) {
       if (this.x + this.size >= width || this.x - this.size <= 0) {
         this.speedX = -this.speedX;
@@ -29,6 +34,7 @@ const createBall = (ctx, x, y, speedX, speedY, color, size) => {
       this.y += this.speedY;
     },
 
+    // Method to detect collisions with other balls and change color on collision
     collisionDetect(balls) {
       balls.forEach(other => {
         if (other !== this) {
@@ -36,6 +42,7 @@ const createBall = (ctx, x, y, speedX, speedY, color, size) => {
           const dy = this.y - other.y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
+          // Change color on collision
           if (distance < this.size + other.size) {
             const red = random(0, 255);
             const green = random(0, 255);
@@ -47,7 +54,7 @@ const createBall = (ctx, x, y, speedX, speedY, color, size) => {
       });
     }
   };
-
+// Return the ball object
   return ball;
 };
 

@@ -1,5 +1,8 @@
+
 import QuickMusicAdder from './QuickMusicAdder';
 
+//  MusicAdderSection Component that provides the layout for the music adder section,
+//  wrapping the QuickMusicAdder component within a styled card.
 export default function MusicAdderSection({
   musicElements,
   onAddMusic,

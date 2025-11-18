@@ -1,5 +1,6 @@
 import React from 'react';
 
+//  PlayButtons Component that provides Play and Stop buttons for controlling playback.
 const PlayButtons = ({ onPlay, onStop }) => {
   return (
     <>

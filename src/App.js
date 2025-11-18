@@ -22,22 +22,23 @@ import DJControlsSection from './components/DJControlsSection';
 import { preProcess } from './utils/PreProcessLogic';
 
 let globalEditor = null;
-
-// REMOVED: Original handleD3Data function caused infinite loops
-// It logged the entire array which created massive strings
-/*
-const handleD3Data = (event) => {
-  console.log(event.detail);
-  console.log('Shalini first commit - git pipline commit test');
-};
-*/
-
-// Track last draw time to throttle updates
 let lastDrawTime = 0;
 
-// Extract music information from Strudel hap objects
-// Converts hap.value into string like "note:c3 s:piano gain:0.5"
-function getMusicInfo(hap) {
+export default function StrudelDemo() {
+  const hasRun = useRef(false);
+
+  const [songText, setSongText] = useState(stranger_tune); // Initial code
+  const [procText, setProcText] = useState(stranger_tune); // Processed code
+  const [volume, setVolume] = useState(50); // Volume as percentage (0-100)
+  const [bpm, setBpm] = useState(140); // BPM control
+  const [editorReady, setEditorReady] = useState(false); // Editor readiness state
+  const [selectedTrack, setSelectedTrack] = useState('stranger'); // Default to stranger track
+  const [musicElements, setMusicElements] = useState([]); // Store added music elements
+  const [state, setState] = useState('stop'); // 'play' or 'stop'
+  const [p1Mode, setP1Mode] = useState('on'); // 'on' or 'hush'
+
+  // Extract music info from hap for logging
+  const getMusicInfo = (hap) => {
   const value = hap.value || {};
 
   if (!value || typeof value !== 'object') return '';
@@ -52,19 +53,6 @@ function getMusicInfo(hap) {
 
   return parts.length > 0 ? parts.join(' ') : '';
 }
-
-export default function StrudelDemo() {
-  const hasRun = useRef(false);
-
-  const [songText, setSongText] = useState(stranger_tune);
-  const [procText, setProcText] = useState(stranger_tune);
-  const [volume, setVolume] = useState(50); // Volume as percentage (0-100)
-  const [bpm, setBpm] = useState(140); // BPM control
-  const [editorReady, setEditorReady] = useState(false);
-  const [selectedTrack, setSelectedTrack] = useState('stranger'); // Default to stranger track
-  const [musicElements, setMusicElements] = useState([]); // Store added music elements
-  const [state, setState] = useState('stop');
-  const [p1Mode, setP1Mode] = useState('on'); // 'on' or 'hush'
 
   const handleTrackChange = useCallback(
     (trackId) => {
@@ -95,10 +83,12 @@ export default function StrudelDemo() {
     setMusicElements((prev) => [...prev, element]);
   }, []);
 
+  // Remove specific music element
   const handleRemoveMusic = useCallback((elementId) => {
     setMusicElements((prev) => prev.filter((el) => el.id !== elementId));
   }, []);
 
+  // Clear all music elements
   const handleClearAllMusic = useCallback(() => {
     setMusicElements([]);
   }, []);
@@ -116,6 +106,8 @@ export default function StrudelDemo() {
     alert('Preset saved successfully!');
   }, [volume, bpm, selectedTrack, musicElements, p1Mode]);
 
+
+  // Load preset from localStorage
   const handleLoadPreset = useCallback(() => {
     const presetStr = localStorage.getItem('strudel_preset');
     if (presetStr) {
@@ -138,6 +130,7 @@ export default function StrudelDemo() {
     }
   }, [handleTrackChange]);
 
+  // Update and play the current track with music elements
   const updatePlayingTrack = useCallback(
     (elements = musicElements) => {
       if (!globalEditor || !editorReady) return;
@@ -176,6 +169,7 @@ export default function StrudelDemo() {
     }
   }, [handleProcess]);
 
+  // Handle playback controls
   const handlePlay = useCallback(() => {
     if (!globalEditor) {
       console.warn('Editor not ready yet');
@@ -183,7 +177,8 @@ export default function StrudelDemo() {
     }
     updatePlayingTrack();
   }, [updatePlayingTrack]);
-
+ 
+  // Stop playback
   const handleStop = useCallback(() => {
     if (!globalEditor) {
       console.warn('Editor not ready yet');
@@ -219,13 +214,13 @@ export default function StrudelDemo() {
   // Keyboard shortcuts: Ctrl+Enter to Play, Ctrl+. to Stop
   useEffect(() => {
     const handleKeyDown = (e) => {
-      // Ctrl + Enter → Play
+      // Ctrl + Enter Play
       if (e.ctrlKey && e.key === 'Enter') {
         e.preventDefault();
         setState('play');
         handlePlay();
       }
-      // Ctrl + . → Stop
+      // Ctrl + . Stop
       if (e.ctrlKey && e.key === '.') {
         e.preventDefault();
         setState('stop');

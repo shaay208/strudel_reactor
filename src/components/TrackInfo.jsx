@@ -1,6 +1,8 @@
 import React from 'react';
 import { getTrackById } from '../tunes';
 
+//  TrackInfo Component displays detailed information about the selected track,
+//  including name, genre, BPM, and visual indicators.
 const TrackInfo = ({ selectedTrack, currentBpm  }) => {
   const track = getTrackById(selectedTrack);
 
@@ -9,6 +11,7 @@ const TrackInfo = ({ selectedTrack, currentBpm  }) => {
   // Use currentBpm if provided, otherwise fall back to track's default BPM
   const displayBpm = currentBpm || track.bpm;
 
+  // Function to get genre icon based on genre name
   const getGenreIcon = (genre) => {
     switch (genre.toLowerCase()) {
       case 'techno':
@@ -25,6 +28,7 @@ const TrackInfo = ({ selectedTrack, currentBpm  }) => {
     }
   };
 
+  // Function to get BPM color class based on BPM value
   const getBpmColor = (bpm) => {
     if (bpm < 100) return 'text-success';
     if (bpm < 140) return 'text-warning';

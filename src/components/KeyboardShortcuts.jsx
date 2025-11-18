@@ -1,5 +1,6 @@
 import React from 'react';
 
+//  KeyboardShortcuts Component displays a small UI card listing the keyboard shortcuts used in the app
 const KeyboardShortcuts = () => {
   return (
     <div className="card glass-card">

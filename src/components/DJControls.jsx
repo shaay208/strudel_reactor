@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { tracks } from '../tunes';
 
+//  DJControls Component provides UI controls for track selection, mode (P1 on/hush), volume,
+//  and BPM adjustments. Also exposes preset save/load buttons.
 const DJControls = ({
   volume,
   onVolumeChange,

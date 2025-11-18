@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 import createBall from '../utils/CreateBall';
 
+//  BallAnimation Component use to display animated balls on a canvas
 const BallAnimation = () => {
   const canvasRef = useRef(null);
   const ctxRef = useRef(null);
@@ -61,7 +62,7 @@ const BallAnimation = () => {
     const ctx = canvas.getContext('2d');
     ctxRef.current = ctx;
 
-    // ⭐ Important: Use parent size, NOT fullscreen
+    // Important: Use parent size, NOT fullscreen
     const parent = canvas.parentElement;
     widthRef.current = canvas.width = parent.clientWidth;
     heightRef.current = canvas.height = parent.clientHeight;

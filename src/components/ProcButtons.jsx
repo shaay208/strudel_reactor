@@ -1,5 +1,6 @@
 import React from 'react';
 
+//  ProcButtons Component that provides Preprocess and Process & Play buttons for controlling code processing.
 const ProcButtons = ({ onProcess, onProcessAndPlay }) => {
   return (
     <div

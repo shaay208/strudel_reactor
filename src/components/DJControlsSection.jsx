@@ -1,6 +1,8 @@
 import DJControls from './DJControls';
 import KeyboardShortcuts from './KeyboardShortcuts';
 
+//  DJControlsSection Component that provides the layout for the DJ controls area,
+//  combining DJControls, KeyboardShortcuts, and a small canvas for visual effects.
 export default function DJControlsSection({
   volume,
   onVolumeChange,

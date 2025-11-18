@@ -2,6 +2,8 @@ import React from 'react';
 import 'animate.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
+//  QuickMusicAdder Component that provides quick add buttons for common music elements,
+//  and displays the list of added music elements with options to remove or clear all.
 const QuickMusicAdder = ({
   musicElements,
   onAddMusic,

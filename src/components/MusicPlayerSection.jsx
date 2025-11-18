@@ -1,5 +1,7 @@
 import MusicPlayer from './MusicPlayer';
 
+//  MusicPlayerSection Component that provides the layout for the music player section,
+//  wrapping the MusicPlayer component within a responsive column.
 const MusicPlayerSection = ({
   state,
   selectedTrack,

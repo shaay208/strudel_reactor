@@ -1,5 +1,8 @@
 import PreprocessTextarea from './PreprocessTextarea';
 
+//  CodeEditorAccordion Component that contains an accordion UI element
+//  for editing and preprocessing Strudel code, as well as displaying
+//  the code editor.
 const CodeEditorAccordion = ({
   songText,
   setSongText,
